@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import validator from '../validator/validator';
 import models from '../schema/models';
 import functions from '../functions/function';
+import path from 'path';
+
 
 interface UserPayload {
     id?: string,
@@ -102,6 +104,8 @@ const registerGroup = async (req: Request, res: Response) => {
             return
         }
 
+        const userPayload = res.locals.user as UserPayload
+
         const isGroupRegistered = !!(await models.Group.findOne({ groupName: value.groupName }))
         if (isGroupRegistered) {
             res.status(404).json({ message: 'group already registered' })
@@ -113,6 +117,8 @@ const registerGroup = async (req: Request, res: Response) => {
 
         const newGroup = new models.Group(groupDataToSave)
         await newGroup.save()
+        await models.User.findOneAndUpdate({ email: userPayload.email }, { $push: { groups: newGroup._id } })
+        await models.Group.findOneAndUpdate({ _id: newGroup._id }, { $push: { admin: userPayload.id } })
 
         res.status(200).json({ message: 'group created' })
     }
@@ -124,8 +130,8 @@ const registerGroup = async (req: Request, res: Response) => {
 
 const fetchAllUsers = async (req: Request, res: Response) => {
     try {
-        
-        const users = await models.User.find().select('_id names email image')
+        const userPayload = res.locals.user as UserPayload
+        const users = await models.User.find({ email: { $ne: userPayload.email } }).select('_id names email image')
         if (!users) {
             res.status(404).json({ message: 'users not found' })
             return
@@ -139,7 +145,7 @@ const fetchAllUsers = async (req: Request, res: Response) => {
             id: user._id.toString(),
         }));
 
-        res.status(200).json({ dataToSend })
+        res.status(200).json({ users: dataToSend })
     }
     catch (error) {
         res.status(500).json({ message: 'its a server error' })
@@ -147,11 +153,68 @@ const fetchAllUsers = async (req: Request, res: Response) => {
     }
 }
 
+const fetchCurrentUser = async (req: Request, res: Response) => {
+    try {
+        const userData = res.locals.user as UserPayload
+        const getUser = await models.User.findById(userData.id).
+            select('-password -privateKey -publicKey')
+            .populate([
+                { path: 'groups', select: '-privateKey -publicKey -iv' },
+                { path: 'friends', select: '-password -privateKey -publicKey' }
+            ])
+        res.status(200).json({ userDetails: getUser })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: 'internal server error' })
+    }
+}
 
+const fetchSpecificUser = async (req: Request, res: Response) => {
+    try {
+        const { userEmail } = req.params
+        const getUser = await models.User.findOne({ email: userEmail }).
+            select('-password -privateKey -publicKey -unreadMessages')
+        if (!getUser) {
+            res.status(400).json({ message: 'User not found' })
+            return
+        }
+        res.status(200).json({ userDetails: getUser })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: 'internal server error' })
+    }
+}
+
+
+const fetchAllGroups = async (req: Request, res: Response) => {
+    try {
+        const userPayload = res.locals.user as UserPayload
+        const groups = await models.Group
+            .find({
+                $or: [
+                    { members: userPayload.id },
+                    { admin: userPayload.id }]
+            })
+            .select('-privateKey -iv')
+        if (!groups) {
+            res.status(404).json({ message: 'No group found' })
+            return
+        }
+
+        res.status(200).json({ groups })
+    }
+    catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
 
 export default {
     login,
     signUp,
     registerGroup,
-    fetchAllUsers
+    fetchAllUsers,
+    fetchCurrentUser,
+    fetchSpecificUser,
+    fetchAllGroups
 }

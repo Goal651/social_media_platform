@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
 
 const groupSchema = new mongoose.Schema({
     groupName: { type: String, required: true },
+    admin: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

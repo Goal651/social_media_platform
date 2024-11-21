@@ -16,8 +16,13 @@ const validateUser = async (req: Request, res: Response, next: NextFunction): Pr
 
     try {
         const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string) as UserPayload;
+        const isValidUser = await models.User.findOne({ email: decoded.email }).select('_id email');
+        if (!isValidUser) {
+            res.status(401).json({ message: 'bad request' });
+            return
+        }
         const data = {
-            id: decoded.id,
+            id: isValidUser._id,
             email: decoded.email
         }
         res.locals.user = data;
