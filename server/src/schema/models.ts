@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     names: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     image: { type: String, default: '' },
     groups: [{
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 })
 
 const groupSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    groupName: { type: String, required: true },
     members: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -38,9 +38,8 @@ const groupSchema = new mongoose.Schema({
         default: []
     }],
     image: { type: String, default: '' },
+    privateKey: { type: String, required: true },
     iv: { type: String, required: true },
-    key: { type: String, required: true },
-    encryptedGroupKey: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
 })
 
