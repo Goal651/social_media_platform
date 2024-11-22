@@ -16,5 +16,7 @@ router.get('/fetchAllUsers', validateUser.validateUser, appController.fetchAllUs
 router.get('/fetchCurrentUser', validateUser.validateUser, appController.fetchCurrentUser)
 router.get('/fetchSpecificUser/:userEmail', validateUser.validateUser, appController.fetchSpecificUser)
 router.get('/fetchAllGroups/', validateUser.validateUser, appController.fetchAllGroups)
+router.get('/fetchSpecificGroup/:groupId', validateUser.validateUser, appController.fetchSpecificGroup)
+router.post('/editCurrentUser', validateUser.validateUser, appController.editCurrentUser)
 
 export default router

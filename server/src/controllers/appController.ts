@@ -209,6 +209,60 @@ const fetchAllGroups = async (req: Request, res: Response) => {
     }
 }
 
+const fetchSpecificGroup = async (req: Request, res: Response) => {
+    try {
+        const { groupId } = req.params
+        const userData = res.locals.user as UserPayload
+        const group = await models.Group.findOne({ _id: groupId, $or: [{ members: userData.id }, { admin: userData.id }] })
+            .select('-privateKey -iv')
+            .populate([
+                { path: 'members', select: '-password -privateKey -publicKey -unreadMessages -groups -friends' },
+                { path: 'admin', select: '-password -privateKey -publicKey -unreadMessages -groups -friends' }
+            ])
+
+        if (!group) {
+            res.status(404).json({ message: 'Group not found' })
+            return
+        }
+
+        const dataToSend = {
+            id: group._id,
+            groupName: group.groupName,
+            admin: group.admin,
+            members: group.members,
+            groupImage: group.image,
+        }
+
+        res.status(200).json({ group: dataToSend })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
+
+const editCurrentUser = async (req: Request, res: Response) => {
+    try {
+        const userData = res.locals.user as UserPayload
+        const user = await models.User.findById(userData.id)
+        if (!user) {
+            res.status(404).json({ message: 'user not found' })
+            return
+        }
+
+        const { names, image } = req.body
+        user.names = names
+        user.image = image
+        await user.save()
+        
+        res.status(200).json({ message: 'user updated' })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
+
+
+
 export default {
     login,
     signUp,
@@ -216,5 +270,7 @@ export default {
     fetchAllUsers,
     fetchCurrentUser,
     fetchSpecificUser,
-    fetchAllGroups
+    fetchAllGroups,
+    fetchSpecificGroup,
+    editCurrentUser
 }

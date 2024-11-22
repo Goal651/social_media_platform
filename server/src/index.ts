@@ -8,6 +8,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { Server } from 'socket.io'
 import router from './routes/routes'
+import chatMaster from './controllers/chatAppController'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ mongoose.connect(mongoUri)
     .then(() => {
         server.listen(PORT)
         console.log('connected to db\nlistening to ', PORT)
+        chatMaster(io)
     })
     .catch((err) => {
         console.log(err)
