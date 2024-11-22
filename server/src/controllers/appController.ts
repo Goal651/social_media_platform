@@ -4,8 +4,6 @@ import { Request, Response } from "express";
 import validator from '../validator/validator';
 import models from '../schema/models';
 import functions from '../functions/function';
-import path from 'path';
-
 
 interface UserPayload {
     id?: string,
@@ -27,6 +25,7 @@ interface UserToSend {
     email: string,
     id: string
 }
+
 const hashPassword = async (password: string): Promise<string> => {
     try {
         const salt = await bcrypt.genSalt(10);
@@ -77,13 +76,13 @@ const login = async (req: Request, res: Response): Promise<void> => {
         const { email, password } = value
         const user = await models.User.findOne({ email })
         if (!user) {
-            res.status(404).json({ message: 'email not found' })
+            res.status(404).json({ message: 'Invalid email or password' })
             return
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password)
         if (!isPasswordMatch) {
-            res.status(401).json({ message: 'invalid password' })
+            res.status(401).json({ message: 'Invalid email or password' })
             return
         }
 
