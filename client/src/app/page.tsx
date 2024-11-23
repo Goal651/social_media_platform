@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
+// Initialize socket connection
 const socket: Socket = io("http://localhost:1000", {
   extraHeaders: {
     "x-access-token": "eyJlbWFpbCI6ICJ1c2VyQGV4YW1wbGUuY29tIn0=", // Mock token
@@ -19,7 +20,10 @@ export default function Home() {
     });
 
     socket.on("message", (data: string) => {
-      setMessages((prev) => [...prev, data]);
+      setMessages((prev) => [...prev, data]); // Display messages
+    });
+    socket.on('notification', (data: string) => {
+      setMessages((prev) => [...prev, data]); // Display messages
     });
 
     socket.on("disconnect", () => {
@@ -34,11 +38,12 @@ export default function Home() {
     };
   }, []);
 
+  // Handle sending messages
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
-      socket.emit("message", inputMessage);
-      setMessages((prev) => [...prev, `You: ${inputMessage}`]);
-      setInputMessage("");
+      socket.emit("message", inputMessage); // Send message to the server
+      setMessages((prev) => [...prev, `You: ${inputMessage}`]); // Add to local messages
+      setInputMessage(""); // Clear input field
     }
   };
 
@@ -47,7 +52,7 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">Wigo Chat Interface</h1>
 
       {/* Chat Box */}
-      <div className="w-full max-w-md h-96 bg-white border border-gray-300 rounded-lg shadow-lg overflow-y-auto p-4">
+      <div className="w-full max-w-md h-96 bg-white text-slate-700 border border-gray-300 rounded-lg shadow-lg overflow-y-auto p-4">
         {messages.map((msg, index) => (
           <div key={index} className="mb-2">
             {msg}

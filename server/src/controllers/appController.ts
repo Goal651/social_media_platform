@@ -252,7 +252,7 @@ const editCurrentUser = async (req: Request, res: Response) => {
         user.names = names
         user.image = image
         await user.save()
-        
+
         res.status(200).json({ message: 'user updated' })
     } catch (error) {
         res.status(500).json({ message: 'its a server error' })
@@ -260,7 +260,84 @@ const editCurrentUser = async (req: Request, res: Response) => {
     }
 }
 
+const createPost = async (req: Request, res: Response) => {
+    try {
+        const userData = res.locals.user as UserPayload
+        const user = !!(await models.User.findById(userData.id))
+        if (!user) {
+            res.status(404).json({ message: 'user not found' })
+            return
+        }
 
+        const { error, value } = validator.postDataSchema.validate(req.body)
+        if (error) {
+            res.status(400).json({ message: error.details[0].message })
+            return
+        }
+
+        const newPost = new models.PostSchema({ creator: userData.id, ...value })
+        await newPost.save()
+        await models.User.updateOne({ _id: userData.id }, { $push: { posts: newPost._id } })
+
+        res.status(200).json({ message: 'post created' })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
+
+const createStatus = async (req: Request, res: Response) => {
+
+    try {
+        const userData = res.locals.user as UserPayload
+        const user = !!(await models.User.findById(userData.id))
+        if (!user) {
+            res.status(404).json({ message: 'user not found' })
+            return
+        }
+
+        const { error, value } = validator.statusDataSchema.validate(req.body)
+        if (error) {
+            res.status(400).json({ message: error.details[0].message })
+            return
+        }
+
+        const newStatus = new models.StatusSchema({ creator: userData.id, ...value })
+        await newStatus.save()
+        await models.User.updateOne({ _id: userData.id }, { $push: { status: newStatus._id } })
+
+        res.status(200).json({ message: 'post created' })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
+
+const createNotification = async (req: Request, res: Response) => {
+    try {
+        const userData = res.locals.user as UserPayload
+        const user = !!(await models.User.findById(userData.id))
+        if (!user) {
+            res.status(404).json({ message: 'user not found' })
+            return
+        }
+
+        const { error, value } = validator.notificationDataSchema.validate(req.body)
+        if (error) {
+            res.status(400).json({ message: error.details[0].message })
+            return
+        }
+
+        const newNotification = new models.Notification({ creator: userData.id, ...value })
+        await newNotification.save()
+        await models.User.updateOne({ _id: userData.id }, { $push: { notifications: newNotification._id } })
+
+        res.status(200).json({ message: 'notification created' })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
 
 export default {
     login,
@@ -271,5 +348,8 @@ export default {
     fetchSpecificUser,
     fetchAllGroups,
     fetchSpecificGroup,
-    editCurrentUser
+    editCurrentUser,
+    createPost,
+    createStatus,
+    createNotification
 }

@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import validateUser from '../controllers/authController'
 import appController from "../controllers/appController";
+import mediaController from "../controllers/mediaController";
 
 const router = Router()
 
@@ -17,6 +18,10 @@ router.get('/fetchCurrentUser', validateUser.validateUser, appController.fetchCu
 router.get('/fetchSpecificUser/:userEmail', validateUser.validateUser, appController.fetchSpecificUser)
 router.get('/fetchAllGroups/', validateUser.validateUser, appController.fetchAllGroups)
 router.get('/fetchSpecificGroup/:groupId', validateUser.validateUser, appController.fetchSpecificGroup)
+
 router.post('/editCurrentUser', validateUser.validateUser, appController.editCurrentUser)
+router.post('/createPost', validateUser.validateUser, appController.createPost)
+
+router.post('/uploadFile', validateUser.validateUser, mediaController.uploadMedia)
 
 export default router

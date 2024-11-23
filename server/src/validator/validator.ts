@@ -45,8 +45,91 @@ const registerGroupDataSchema = Joi.object({
     }),
 })
 
+const postDataSchema = Joi.object({
+    content: Joi.string().required().messages({
+        'string.empty': 'Content is required',
+        'any.required': 'Content is required',
+    }),
+    postType: Joi.string().required().messages({
+        'string.empty': 'Post type is required',
+        'any.required': 'Post type is required',
+    }),
+    file: Joi.string().strict().messages({
+        'string.base': 'File is invalid'
+    })
+})
+
+const statusDataSchema = Joi.object({
+    content: Joi.string().required().messages({
+        'string.empty': 'Content is required',
+        'any.required': 'Content is required',
+    }),
+    statusType: Joi.string().required().messages({
+        'string.empty': 'Post type is required',
+        'any.required': 'Post type is required',
+    }),
+    file: Joi.string().strict().messages({
+        'string.base': 'File is invalid'
+    })
+})
+
+const notificationDataSchema = Joi.object({
+    content: Joi.string().required().messages({
+        'string.empty': 'Content is required',
+        'any.required': 'Content is required',
+    }),
+    notificationType: Joi.string().required().messages({
+        'string.empty': 'Notification type is required',
+        'any.required': 'Notification type is required',
+    }),
+    from: Joi.string().required().messages({
+        'string.empty': 'From is required',
+        'any.required': 'From is required',
+    }),
+    to: Joi.string().required().messages({
+        'string.empty': 'To is required',
+        'any.required': 'To is required',
+    }),
+})
+
+const fileDataSchema = Joi.object({
+    fileChunk: Joi.string().strict().required().messages({
+        'string.base': 'File is invalid',
+        'any.required': 'File is required',
+    }),
+    fileName: Joi.string().required().messages({
+        'string.empty': 'File name is required',
+        'any.required': 'File name is required',
+    }),
+
+    fileSize: Joi.number().required().messages({
+        'string.empty': 'File size is required',
+        'any.required': 'File size is required',
+    }),
+
+    fileType: Joi.string().required().messages({
+        'string.empty': 'File type is required',
+        'any.required': 'File type is required',
+    }),
+
+    totalChunks: Joi.number().required().messages({
+        'string.empty': 'Total chunks is required',
+        'any.required': 'Total chunks is required',
+    }),
+    currentChunk: Joi.number().required().messages({
+        'string.empty': 'Current chunk is required',
+        'any.required': 'Current chunk is required',
+    }),
+
+})
+
+
 export default {
     signUpDataSchema,
     loginDataSchema,
-    registerGroupDataSchema
+    registerGroupDataSchema,
+    postDataSchema,
+    statusDataSchema,
+    notificationDataSchema,
+    fileDataSchema
 }

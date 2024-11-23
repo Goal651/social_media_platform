@@ -20,6 +20,21 @@ const userSchema = new mongoose.Schema({
         ref: 'Message',
         default: []
     }],
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+        default: []
+    }],
+    status: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Status',
+        default: []
+    }],
+    notifications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification',
+        default: []
+    }],
     lastActiveTime: { type: Date, default: Date.now },
     publicKey: { type: String, required: true },
     privateKey: { type: String, required: true },
@@ -89,14 +104,65 @@ const groupMessageSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 })
 
+const postSchema = new mongoose.Schema({
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    postType: { type: String, required: true },
+    content: { type: String, required: true },
+    images: [{
+        type: String, default: []
+    }],
+    createdAt: { type: Date, default: Date.now },
+})
+
+
+const statusSchema = new mongoose.Schema({
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    statusType: { type: String, required: true },
+    content: { type: String, required: true },
+    images: [{
+        type: String, default: []
+    }],
+    createdAt: { type: Date, default: Date.now },
+})
+
+const notificationSchema = new mongoose.Schema({
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    receiver: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    notificationType: { type: String, required: true },
+    content: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+})
+
 const User = mongoose.model('User', userSchema);
 const Group = mongoose.model('Group', groupSchema);
 const Message = mongoose.model('Message', messageSchema);
 const GroupMessage = mongoose.model('GroupMessage', groupMessageSchema);
+const PostSchema = mongoose.model('Post', postSchema)
+const StatusSchema = mongoose.model('Status', statusSchema)
+const Notification = mongoose.model('Notification', notificationSchema)
 
 export default {
     User,
     Group,
     Message,
-    GroupMessage
+    GroupMessage,
+    PostSchema,
+    StatusSchema,
+    Notification
 }

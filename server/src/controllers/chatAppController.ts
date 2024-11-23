@@ -1,51 +1,78 @@
 import { Server, Socket } from "socket.io";
 
-// Store active sockets and their associated users
-const userSockets = new Map<string, string>(); // Maps user email to socket ID
-const rooms: { [key: string]: Set<string> } = {}; // Maps room names to sets of socket IDs
+const userSockets = new Map<string, Set<string>>();  // Stores multiple socket IDs per user
+const rooms: { [key: string]: Set<string> } = {};
+
+
+
+const handleJoinRoom = (socket: Socket, room: string, io: Server) => {
+    if (!rooms[room]) rooms[room] = new Set();
+    rooms[room].add(socket.id);
+    socket.join(room);
+    io.to(room).emit("message", `${socket.id} has joined the room.`);
+    console.log(`Socket ${socket.id} joined room: ${room}`);
+};
+
+const handleMessage = (socket: Socket, msg: string) => {
+    console.log(`Message from ${socket.id}: ${msg}`);
+    socket.broadcast.emit("message", msg);
+};
+
+
+const handleSetUser = (socket: Socket, email: string) => {
+    if (!userSockets.has(email)) {
+        userSockets.set(email, new Set());
+    }
+    const socketSet = userSockets.get(email);
+    socketSet?.add(socket.id);
+    console.log(`User ${email} connected with socket ID: ${socket.id}`);
+    socket.emit('notification', 'You are now connected' );
+};
+
+const handleDisconnect = (socket: Socket, io: Server) => {
+    console.log(`User disconnected: ${socket.id}`);
+
+    for (const room in rooms) {
+        if (rooms[room].has(socket.id)) {
+            rooms[room].delete(socket.id);
+            io.to(room).emit("message", `${socket.id} has left the room.`);
+        }
+    }
+
+    for (const [email, sockets] of userSockets.entries()) {
+        if (sockets.has(socket.id)) {
+            sockets.delete(socket.id);
+            if (sockets.size === 0) {
+                userSockets.delete(email);  // Clean up user if no sockets remain
+            }
+            break;
+        }
+    }
+};
+
+const sendNotificationToUser = (email: string, message: string, io: Server) => {
+    const sockets = userSockets.get(email);
+    if (sockets && sockets.size > 0) {
+        sockets.forEach(socketId => {
+            io.to(socketId).emit("notification", message);
+        });
+        console.log(`Notification sent to ${email} on all connected devices.`);
+    } else {
+        console.warn(`No active connections for user ${email}`);
+    }
+};
 
 const chatMaster = (io: Server) => {
     io.on("connection", (socket: Socket) => {
-        console.log(`User connected: ${socket.id}`);
-
-        // When a user joins a room
-        socket.on("joinRoom", (room: string) => {
-            console.log(`Socket ${socket.id} joining room: ${room}`);
-            // Add socket to room
-            if (!rooms[room]) {
-                rooms[room] = new Set();
-            }
-            rooms[room].add(socket.id);
-            socket.join(room);
-            io.to(room).emit("message", `${socket.id} has joined the room.`);
-        });
-
-        // Handle user sending messages
-        socket.on("message", (msg: string) => {
-            console.log(`Message from ${socket.id}: ${msg}`);
-            // Broadcast the message to all sockets in the room
-            socket.broadcast.emit("message", msg);
-        });
-
-        // When a user disconnects
-        socket.on("disconnect", () => {
-            console.log(`User disconnected: ${socket.id}`);
-            // Remove from any rooms
-            for (const room in rooms) {
-                if (rooms[room].has(socket.id)) {
-                    rooms[room].delete(socket.id);
-                    io.to(room).emit("message", `${socket.id} has left the room.`);
-                }
-            }
-            userSockets.delete(socket.id); // Remove user from the map
-        });
-
-        // Example: Assign a user socket to a specific email (mock token validation)
-        socket.on("setUser", (email: string) => {
-            userSockets.set(email, socket.id);
-            console.log(`User ${email} connected with socket ID: ${socket.id}`);
+        socket.on("joinRoom", (room: string) => handleJoinRoom(socket, room, io));
+        socket.on("message", (msg: string) => handleMessage(socket, msg));
+        socket.on("setUser", (email: string) => handleSetUser(socket, email));
+        socket.on("disconnect", () => handleDisconnect(socket, io));
+        socket.on("sendNotificationToUser", (email: string, message: string) => {
+            sendNotificationToUser(email, message, io);
         });
     });
 };
+
 
 export default chatMaster;
