@@ -68,7 +68,7 @@ const statusDataSchema = Joi.object({
         'string.empty': 'Post type is required',
         'any.required': 'Post type is required',
     }),
-    file: Joi.string().strict().messages({
+    statusFileUrls: Joi.array().items(Joi.string()).messages({
         'string.base': 'File is invalid'
     })
 })

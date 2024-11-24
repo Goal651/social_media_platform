@@ -21,6 +21,8 @@ router.get('/fetchSpecificGroup/:groupId', validateUser.validateUser, appControl
 
 router.post('/editCurrentUser', validateUser.validateUser, appController.editCurrentUser)
 router.post('/createPost', validateUser.validateUser, appController.createPost)
+router.post('/createStatus', validateUser.validateUser, appController.createStatus)
+router.get('/fetchAllStatuses', validateUser.validateUser, appController.fetchAllStatuses)
 
 router.post('/uploadFile', validateUser.validateUser, mediaController.uploadMedia)
 

@@ -127,7 +127,7 @@ const statusSchema = new mongoose.Schema({
     },
     statusType: { type: String, required: true },
     content: { type: String, required: true },
-    images: [{
+    files: [{
         type: String, default: []
     }],
     createdAt: { type: Date, default: Date.now },

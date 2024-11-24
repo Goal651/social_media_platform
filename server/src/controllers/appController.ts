@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import validator from '../validator/validator';
 import models from '../schema/models';
 import functions from '../functions/function';
+import mediaController from './mediaController';
 
 interface UserPayload {
     id?: string,
@@ -301,7 +302,7 @@ const createStatus = async (req: Request, res: Response) => {
             res.status(400).json({ message: error.details[0].message })
             return
         }
-
+        value.files = value.statusFileUrls
         const newStatus = new models.StatusSchema({ creator: userData.id, ...value })
         await newStatus.save()
         await models.User.updateOne({ _id: userData.id }, { $push: { status: newStatus._id } })
@@ -339,6 +340,25 @@ const createNotification = async (req: Request, res: Response) => {
     }
 }
 
+const fetchAllStatuses = async (req: Request, res: Response) => {
+    try {
+        const allStatuses = (await models.StatusSchema.find().populate([
+            { path: 'creator', select: 'names image' }
+        ]))
+        await Promise.all(allStatuses.map(async status => {
+            const files = await mediaController.fetchFiles(status.files)
+            if (files) {
+                status.files = files
+            }
+        }))
+
+        res.status(200).json({ allStatuses })
+    } catch (error) {
+        res.status(500).json({ message: 'its a server error' })
+        console.log(error)
+    }
+}
+
 export default {
     login,
     signUp,
@@ -351,5 +371,6 @@ export default {
     editCurrentUser,
     createPost,
     createStatus,
-    createNotification
+    createNotification,
+    fetchAllStatuses
 }

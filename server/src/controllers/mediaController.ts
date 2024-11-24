@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import fs from "fs";
 import crypto from "crypto";
 import path from "path";
+import mime from 'mime-types'
 
 interface UserPayload {
     id: string;
@@ -20,16 +21,16 @@ const uploadMedia = async (req: Request, res: Response): Promise<void> => {
     try {
         const userPayload = res.locals.user as UserPayload;
         const { totalchunks, currentchunk, filename } = req.headers as unknown as FileData;
-
-        const { chunk } = req.body; // Assuming the client sends { chunk: base64Chunk }
+        const { chunk } = req.body;
         if (!chunk) {
             res.status(400).json({ message: "No chunk data received" });
             return
         }
+
         if (typeof chunk !== "string") {
             throw new Error("Invalid chunk format: Expected a Base64 string.");
         }
-        //code the Base64 chunk into binary data
+
         const base64Data = chunk.split(",")[1];
         const fileChunk = Buffer.from(base64Data, "base64");
 
@@ -59,6 +60,21 @@ const uploadMedia = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+const fetchFiles = async (filePaths: string[]): Promise<string[] | undefined> => {
+    try {
+        const files = filePaths.map((filePath: string) => {
+            const fileBuffer = fs.readFileSync(filePath); // Read the file
+            const mimeType = mime.lookup(filePath) || 'application/octet-stream'; // Get MIME type
+            const base64String = fileBuffer.toString('base64'); // Convert to Base64
+            return `data:${mimeType};base64,${base64String}`;
+        });
+        return files;
+    } catch (error) {
+        console.error('Error reading files:', error);
+        return undefined;
+    }
+};
 export default {
     uploadMedia,
+    fetchFiles
 };

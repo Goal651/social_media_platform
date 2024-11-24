@@ -26,7 +26,7 @@ const handleSetUser = (socket: Socket, email: string) => {
     const socketSet = userSockets.get(email);
     socketSet?.add(socket.id);
     console.log(`User ${email} connected with socket ID: ${socket.id}`);
-    socket.emit('notification', 'You are now connected' );
+    socket.emit('notification', 'You are now connected');
 };
 
 const handleDisconnect = (socket: Socket, io: Server) => {
@@ -61,6 +61,8 @@ const sendNotificationToUser = (email: string, message: string, io: Server) => {
         console.warn(`No active connections for user ${email}`);
     }
 };
+
+const handleSendingMessage = () => { }
 
 const chatMaster = (io: Server) => {
     io.on("connection", (socket: Socket) => {
