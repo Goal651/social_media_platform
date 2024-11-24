@@ -22,7 +22,7 @@ const CarouselItem = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => {
                         src={imageUrl}
                         alt={alt}
                         className="rounded-full"
-                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                        style={{ width: '70px', height: '70px', objectFit: 'cover' }}
                     />
                 ) : (
                     <Image
@@ -35,7 +35,7 @@ const CarouselItem = ({ imageUrl, alt }: { imageUrl: string; alt: string }) => {
                     />
                 )}
             </div>
-            {<p className="text-sm mt-2">
+            {<p className="text-sm text-center font-semibold mt-2">
                 {alt}
             </p>}
         </div>
@@ -83,10 +83,10 @@ const Stories = (): JSX.Element => {
             <div className="carousel rounded-box w-full h-full space-x-10">
                 <Link href={'/createStory'} className="carousel-item flex-col indicator">
                     <div>
-                        <span className="badge indicator-item indicator-bottom bottom-12 right-6 rounded place-items-center w-5 h-5 bg-slate-400 text-white">
+                        <span className="badge indicator-item indicator-bottom bottom-20 right-2 rounded place-items-center w-5 h-5 bg-slate-400 text-white">
                             +
                         </span>
-                        <div className="grid h-32 w-32 place-items-center">
+                        <div className="grid h-[70px] w-[70px] place-items-center">
                             <div className="rounded-full bg-slate-400 p-5">
                                 <Image
                                     src="/no_profile.svg"
