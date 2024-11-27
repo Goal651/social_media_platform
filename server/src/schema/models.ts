@@ -115,6 +115,10 @@ const postSchema = new mongoose.Schema({
     images: [{
         type: String, default: []
     }],
+    reactions: [{
+        reactor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        reaction: { type: String, default: '' }
+    }],
     createdAt: { type: Date, default: Date.now },
 })
 
@@ -129,6 +133,10 @@ const statusSchema = new mongoose.Schema({
     content: { type: String, required: true },
     files: [{
         type: String, default: []
+    }],
+    reactions: [{
+        reactor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        reaction: { type: String, default: '' }
     }],
     createdAt: { type: Date, default: Date.now },
 })
