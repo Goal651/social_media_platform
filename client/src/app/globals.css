@@ -17,7 +17,10 @@
 body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(245.73deg, rgba(199, 145, 225, 0.4) 6.38%, rgba(243, 232, 250, 0.4) 25.13%, rgba(245, 236, 251, 0.4) 40.26%, rgba(245, 236, 251, 0.4) 45.4%);
+  background-color:#ededed;
 }
+/* Hide scrollbars but still allow scrolling */
 
-
+.hide-scrollbar{
+  scrollbar-width: none;
+}
