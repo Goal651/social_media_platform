@@ -40,7 +40,7 @@ export default function DashProfile() {
 
 
     return (
-        <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl'>
+        <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl text-black'>
             {loading && (
                 <div>
                     <div className='loading loading-ring' />

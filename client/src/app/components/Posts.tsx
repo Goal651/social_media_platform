@@ -18,7 +18,7 @@ export default function Posts() {
     ];
 
     return (
-        <div className="flex flex-col gap-y-2 bg-gradient-to-r from-purple-300 to-purple-400 rounded-xl">
+        <div className="flex flex-col gap-y-2 bg-gradient-to-r from-purple-300 to-purple-400 rounded-xl text-black">
             {/* Header Section */}
             <div className="flex justify-start items-center p-4">
                 <div className="rounded-full">

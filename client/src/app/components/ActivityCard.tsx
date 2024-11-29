@@ -42,7 +42,7 @@ const activities: ActivityItem[] = [
 
 const ActivityCard: React.FC = () => {
     return (
-        <div className="max-w-md p-8  rounded-2xl shadow-md bg-purple-100">
+        <div className="max-w-md p-8  rounded-2xl shadow-md bg-purple-100 text-black">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-bold">Activity</h2>

@@ -351,7 +351,6 @@ const fetchAllStatuses = async (req: Request, res: Response) => {
                 status.files = files
             }
         }))
-
         res.status(200).json({ allStatuses })
     } catch (error) {
         res.status(500).json({ message: 'its a server error' })

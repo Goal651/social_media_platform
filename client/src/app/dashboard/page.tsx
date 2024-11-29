@@ -20,7 +20,7 @@ export default function Dashboard() {
                 </div>
                 <div className=''>
                     <div className="bg-slate-100 h-fit flex flex-col items-center *:font-semibold gap-y-5 my-2 mx-4 py-4">
-                        <div className="flex flex-col gap-y-10 items-start ">
+                        <div className="flex flex-col gap-y-10 items-start text-black">
                             <Link className="flex space-x-4 w-full "
                                 href={'/dashboard'}
                             >
@@ -97,7 +97,7 @@ export default function Dashboard() {
                     <div>
                         <Link
                             href={'/createStory'}
-                            className="btn border-0 bg-gradient-to-r from-slate-300 to-purple-500 px-5"
+                            className="btn border-0 bg-gradient-to-r from-slate-300 to-purple-500 px-5 text-black"
                         >
                             + create new post
                         </Link>

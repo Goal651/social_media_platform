@@ -11,32 +11,32 @@ interface SuggestionItem {
 
 const suggestions: SuggestionItem[] = [
   {
-    profileImage: "/images/profile1.jpg",
+    profileImage: "/user.png",
     username: "K_Anitta❤️😍",
     description: "followed by Adrien",
   },
   {
-    profileImage: "/images/profile2.jpg",
+    profileImage: "/user.png",
     username: "Karabo_Angee",
     description: "suggested for you",
   },
   {
-    profileImage: "/images/profile3.jpg",
+    profileImage: "/user.png",
     username: "Brian Madison",
     description: "followed by kinghim",
   },
   {
-    profileImage: "/images/profile4.jpg",
+    profileImage: "/user.png",
     username: "yahhhhlah",
     description: "suggested for you",
   },
   {
-    profileImage: "/images/profile5.jpg",
+    profileImage: "/user.png",
     username: "_n😇😎😄",
     description: "followed by chance",
   },
   {
-    profileImage: "/images/profile6.jpg",
+    profileImage: "/user.png",
     username: "Kelen",
     description: "followed by helena",
   },
@@ -44,7 +44,7 @@ const suggestions: SuggestionItem[] = [
 
 const SuggestionsCard: React.FC = () => {
   return (
-    <div className="max-w-md p-4 bg-base-100 rounded-lg shadow-md border border-base-300">
+    <div className="max-w-md p-8  rounded-2xl shadow-md bg-purple-100 text-black ">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Suggestions for you</h2>
@@ -68,7 +68,7 @@ const SuggestionsCard: React.FC = () => {
             </div>
 
             {/* Follow Button */}
-            <button className="btn btn-sm btn-primary text-sm capitalize">Follow</button>
+            <button className="btn btn-sm bg-indigo-700 border-0  hover:bg-indigo-800 text-white text-sm capitalize">Follow</button>
           </div>
         ))}
       </div>
