@@ -46,7 +46,7 @@ export default function DashProfile() {
                     <div className='loading loading-ring' />
                 </div>
             )}
-            {userDetails && (
+            {userDetails||!userDetails && (
                 <div className='flex flex-col space-y-4 items-center'>
                     <div className=' w-full flex flex-col items-center h-fit'>
                         <div className='rounded-2xl bg-black w-full place-items-center'>
