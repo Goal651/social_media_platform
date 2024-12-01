@@ -41,12 +41,12 @@ export default function DashProfile() {
 
     return (
         <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl text-black'>
-            {loading && (
+            {loading ? (
                 <div>
                     <div className='loading loading-ring' />
                 </div>
-            )}
-            {userDetails||!userDetails && (
+            ):
+         (
                 <div className='flex flex-col space-y-4 items-center'>
                     <div className=' w-full flex flex-col items-center h-fit'>
                         <div className='rounded-2xl bg-black w-full place-items-center'>
