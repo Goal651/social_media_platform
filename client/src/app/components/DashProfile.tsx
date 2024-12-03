@@ -1,43 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { useEffect, useState } from 'react'
-
-interface User {
-    _id: string,
-    names: string,
-    email: string,
-
-}
 
 export default function DashProfile() {
-    const [userDetails, setUserDetails] = useState<User | null>()
-    const [loading, setLoading] = useState(true)
-
-    const fetchUserDetails = async () => {
-        try {
-
-            const response = await fetch('http://localhost:1000/api/fetchCurrentUser', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    accessToken: `${localStorage.getItem('token')}`,
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setUserDetails(data.userDetails);
-            }
-        } catch (error) {
-            console.error(error)
-        } finally { setLoading(false) }
-
-    }
-
-    useEffect(() => {
-        fetchUserDetails()
-    }, [])
-
+    const loading = false
 
     return (
         <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl text-black'>
@@ -45,8 +11,7 @@ export default function DashProfile() {
                 <div>
                     <div className='loading loading-ring' />
                 </div>
-            ):
-         (
+            ) : (
                 <div className='flex flex-col space-y-4 items-center'>
                     <div className=' w-full flex flex-col items-center h-fit'>
                         <div className='rounded-2xl bg-black w-full place-items-center'>

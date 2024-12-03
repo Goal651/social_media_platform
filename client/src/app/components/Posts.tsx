@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import Gallery from "@/app/components/Gallery"; // Import the Gallery component
+import * as icons from 'react-icons/ai';
 
 export default function Posts() {
     // Dynamic photo data
@@ -13,7 +14,7 @@ export default function Posts() {
         "/user.png",
         "/userPro.png",
         "/user.png",
-        "/user.png", 
+        "/user.png",
         "/userPro.png",
     ];
 
@@ -39,6 +40,11 @@ export default function Posts() {
             {/* Gallery Section */}
             <div className="flex justify-center items-center">
                 <Gallery photos={photos} />
+            </div>
+            <div>
+                <div>
+                    <icons.AiFillHeart size={'1.5em'} />
+                </div>
             </div>
         </div>
     );
