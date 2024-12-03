@@ -22,14 +22,13 @@ export default function Posts() {
         <div className="flex flex-col gap-y-2 bg-gradient-to-r from-purple-300 to-purple-400 rounded-xl text-black">
             {/* Header Section */}
             <div className="flex justify-start items-center p-4">
-                <div className="rounded-full">
-                    <Image
-                        src={'/nopro.png'}
-                        alt='Profile'
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
+                <div className="rounded-full relative w-16 h-16">
+                <Image
+                            src="/contact.png"
+                            alt=""
+                            layout="fill"
+                            className="object-cover rounded-full"
+                        />
                 </div>
                 <div className="flex flex-col justify-start ml-4">
                     <div className="font-semibold">Versal_official</div>

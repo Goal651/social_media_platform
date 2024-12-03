@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface GalleryProps {
     photos: string[];
@@ -60,15 +61,18 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 {/* Highlighted Photo */}
                 {photos.length > 0 && (
                     <div
-                        className="relative col-span-1 row-span-2 cursor-pointer"
-                        onClick={() => setSelectedPhotoIndex(0)}
+                        className="relative cursor-pointer w-full h-full"
+                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)} // Optional click handler
                     >
-                        <img
-                            src={photos[0]}
-                            alt="Highlighted"
+                        <Image
+                            src="/contact.png"
+                            alt=""
+                            width={100}
+                            height={100}
                             className="w-full h-full object-cover rounded-lg"
                         />
                     </div>
+
                 )}
 
                 {/* Smaller Photos */}

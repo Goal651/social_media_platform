@@ -29,51 +29,51 @@ const Stories = () => {
         {
             userId: 'user1',
             userName: 'Alice',
-            userProfilePic: 'https://via.placeholder.com/50',
+            userProfilePic: '/user.png',
             stories: [
                 {
                     _id: 'story1',
                     creator: { names: 'Alice', _id: 'user1' },
                     content: 'Alice Story 1',
-                    files: ['https://via.placeholder.com/600x400'],
+                    files: ['/userPro.png'],
                 },
                 {
                     _id: 'story2',
                     creator: { names: 'Alice', _id: 'user1' },
                     content: 'Alice Story 2',
-                    files: ['https://via.placeholder.com/600x400'],
+                    files: ['/user.png'],
                 },
             ],
         },
         {
             userId: 'user2',
             userName: 'Bob',
-            userProfilePic: 'https://via.placeholder.com/50',
+            userProfilePic: '/userPro.png',
             stories: [
                 {
                     _id: 'story3',
                     creator: { names: 'Bob', _id: 'user2' },
                     content: 'Bob Story 1',
-                    files: ['https://via.placeholder.com/600x400'],
+                    files: ['/userPro.png'],
                 },
             ],
         },
         {
             userId: 'user3',
             userName: 'Charlie',
-            userProfilePic: 'https://via.placeholder.com/50',
+            userProfilePic: '/contact.png',
             stories: [
                 {
                     _id: 'story4',
                     creator: { names: 'Charlie', _id: 'user3' },
                     content: 'Charlie Story 1',
-                    files: ['https://via.placeholder.com/600x400'],
+                    files: ['/user.png'],
                 },
                 {
                     _id: 'story5',
                     creator: { names: 'Charlie', _id: 'user3' },
                     content: 'Charlie Story 2',
-                    files: ['https://via.placeholder.com/600x400'],
+                    files: ['/userPro.png'],
                 },
             ],
         },
@@ -120,14 +120,19 @@ const Stories = () => {
                         className="flex flex-col items-center cursor-pointer "
                         onClick={() => openStoryViewer(index)}
                     >
-                        <div className='bg-gradient-to-t from-purple-100 to-purple-400 rounded-full'>
-                            <img
-                                src={user.userProfilePic}
-                                alt={user.userName}
-                                className="w-16 h-16 rounded-full"
-                            />
+                        <div className=''>
+                            <div className='w-16 h-16 relative bg-gradient-to-t from-purple-100 to-purple-400 rounded-full'>
+                                <Image
+                                    alt='profile'
+                                    src={user.userProfilePic}
+                                    layout='fill'
+                                    className='rounded-full w-full h-full '
+                                />
+                            </div>
                         </div>
-                        <p className="text-sm mt-2">{user.userName}</p>
+                        <div className="text-sm mt-2 text-black">
+                            {user.userName}
+                        </div>
                     </div>
                 ))}
             </div>
