@@ -17,10 +17,11 @@ export default function DashContact() {
                 <div className="w-full flex flex-row justify-evenly items-center">
                     <div className="rounded-full">
                         <Image
-                            src="/nopro.png"
+                            src="/contact.png"
                             alt=''
                             width={100}
                             height={100}
+                            className="rounded-full"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -81,7 +82,7 @@ export default function DashContact() {
                     </div>
                     <div className="flex flex-col">
                         <div className="font-semibold">K_Anitha</div>
-                        <div className="text-xs">Kigali, Rwanda </div>
+                        <div className="text-xs">Kigali, Rwanda</div>
                     </div>
                 </div>
             </div>

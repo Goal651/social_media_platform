@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Gallery from "@/app/components/Gallery"; // Import the Gallery component
-import * as icons from 'react-icons/ai';
+import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 
 export default function Posts() {
     // Dynamic photo data
@@ -42,8 +42,26 @@ export default function Posts() {
                 <Gallery photos={photos} />
             </div>
             <div>
-                <div>
-                    <icons.AiFillHeart size={'1.5em'} />
+                <div className="flex justify-start space-x-8  p-4">
+                    <button className="flex items-center space-x-2">
+                        <FaRegHeart
+                            className="text-black"
+                            size={20} />
+                        <span
+                            className="text-black text-lg font-medium">
+                            12.5k
+                        </span>
+                    </button>
+                    <button className="flex items-center space-x-2">
+                        <FaRegComment
+                            className="text-black"
+                            size={20} />
+                        <span
+                            className="text-black text-lg font-medium">
+                            45k
+                        </span>
+
+                    </button>
                 </div>
             </div>
         </div>

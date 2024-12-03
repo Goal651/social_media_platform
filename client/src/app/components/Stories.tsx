@@ -82,17 +82,19 @@ const Stories = () => {
     const openStoryViewer = (userIndex: number) => {
         setSelectedUserIndex(userIndex);
         setIsStoryViewerOpen(true);
+
     };
 
     const closeStoryViewer = () => {
         setIsStoryViewerOpen(false);
+        console.log(selectedUserIndex)
     };
 
     return (
         <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">Stories</h2>
             <div className="flex gap-4">
-            <Link href={'/createStory'} className="carousel-item flex-col">
+                <Link href={'/createStory'} className="carousel-item flex-col">
                     <div className="indicator">
                         <span className="w-5 h-5 badge indicator-item indicator-bottom bg-purple-700 text-white text-xl rounded-none p-0 bottom-2 right-2">
                             +
@@ -118,13 +120,13 @@ const Stories = () => {
                         className="flex flex-col items-center cursor-pointer "
                         onClick={() => openStoryViewer(index)}
                     >
-                     <div className='bg-gradient-to-t from-purple-100 to-purple-400 rounded-full'>
-                     <img 
-                            src={user.userProfilePic}
-                            alt={user.userName}
-                            className="w-16 h-16 rounded-full"
-                        />
-                     </div>
+                        <div className='bg-gradient-to-t from-purple-100 to-purple-400 rounded-full'>
+                            <img
+                                src={user.userProfilePic}
+                                alt={user.userName}
+                                className="w-16 h-16 rounded-full"
+                            />
+                        </div>
                         <p className="text-sm mt-2">{user.userName}</p>
                     </div>
                 ))}
