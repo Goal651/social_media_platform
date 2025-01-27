@@ -13,6 +13,7 @@ export default function Testing(params: ParamsInterface) {
     const CHUNK_SIZE = 1024 * 50;
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState<number[]>([]);
+    const accessToken = localStorage.getItem('token')
 
     const convertToBase64 = (fileChunk: Blob): Promise<string> => {
         return new Promise((resolve, reject) => {
@@ -34,7 +35,7 @@ export default function Testing(params: ParamsInterface) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                accessToken: `${localStorage.getItem('token')}`,
+                accessToken: `${accessToken}`,
                 fileName: `${file.name}`,
                 fileSize: `${file.size}`,
                 fileType: `${file.type}`,

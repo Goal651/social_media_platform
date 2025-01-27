@@ -15,37 +15,40 @@ interface User {
 
 export default function DashProfile() {
     const loading = false
-    const sessionUser: User = JSON.parse(sessionStorage.getItem('user') || '{}')
+    const sessionData = sessionStorage.getItem('user')
+    const sessionUser: User = JSON.parse(sessionData || '{}')
     const [user, setUser] = useState<User | null>(sessionUser as User)
     const [loadingPic, setLoadingPic] = useState(true)
+    const accessToken = localStorage.getItem("token")
 
-    const fetchCurrentUser = async () => {
-        if (user?.image === '') return setLoadingPic(false)
-        try {
-            const response = await fetch(`http://localhost:1000/api/getFile/${user?.image}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    accessToken: `${localStorage.getItem("token")}`,
-                },
-            });
-            const data = await response.json();
-            if (response.status === 200) {
-                setUser(prev => {
-                    if (prev) return { ...prev, file: data.file }
-                    return prev
-                });
-                setLoadingPic(false)
-            }
-            else if (response.status === 400) localStorage.setItem("token", data.token)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
+    
     useEffect(() => {
+        const fetchCurrentUser = async () => {
+            if (user?.image === '') return setLoadingPic(false)
+            try {
+                const response = await fetch(`http://localhost:1000/api/getFile/${user?.image}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        accessToken: `${accessToken}`,
+                    },
+                });
+                const data = await response.json();
+                if (response.status === 200) {
+                    setUser(prev => {
+                        if (prev) return { ...prev, file: data.file }
+                        return prev
+                    });
+                    setLoadingPic(false)
+                }
+                else if (response.status === 400) localStorage.setItem("token", data.token)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    
         fetchCurrentUser()
-    }, [])
+    }, [accessToken])
 
     return (
         <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl text-black'>
