@@ -11,6 +11,7 @@ router.get('/', validateUser.validateUser, (req: Request, res: Response) => {
 })
 router.post('/login', appController.login)
 router.post('/signUp', appController.signUp)
+router.get('/checkUser', validateUser.validateUser, validateUser.checkUser)
 router.post('/registerGroup', validateUser.validateUser, appController.registerGroup)
 
 router.get('/fetchAllUsers', validateUser.validateUser, appController.fetchAllUsers)
@@ -19,11 +20,12 @@ router.get('/fetchSpecificUser/:userEmail', validateUser.validateUser, appContro
 router.get('/fetchAllGroups/', validateUser.validateUser, appController.fetchAllGroups)
 router.get('/fetchSpecificGroup/:groupId', validateUser.validateUser, appController.fetchSpecificGroup)
 
-router.post('/editCurrentUser', validateUser.validateUser, appController.editCurrentUser)
+router.put('/editCurrentUser', validateUser.validateUser, appController.editCurrentUser)
 router.post('/createPost', validateUser.validateUser, appController.createPost)
 router.post('/createStatus', validateUser.validateUser, appController.createStatus)
 router.get('/fetchAllStatuses', validateUser.validateUser, appController.fetchAllStatuses)
 
 router.post('/uploadFile', validateUser.validateUser, mediaController.uploadMedia)
+router.get('/getFile/:filename', mediaController.getFile)
 
 export default router

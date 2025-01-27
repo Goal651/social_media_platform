@@ -87,7 +87,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
             return
         }
 
-        const token = jwt.sign({ email, password }, process.env.JWT_SECRET as string)
+        const token = jwt.sign({ email, id: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1d' })
         res.status(200).json({ token })
     } catch (error) {
         res.status(500).json({ message: 'its a server error' })
@@ -250,8 +250,8 @@ const editCurrentUser = async (req: Request, res: Response) => {
         }
 
         const { names, image } = req.body
-        user.names = names
-        user.image = image
+        if (names) user.names = names
+        if (image) user.image = image
         await user.save()
 
         res.status(200).json({ message: 'user updated' })

@@ -10,11 +10,13 @@ import ActivityCard from "@/app/components/ActivityCard"
 import SuggestionCard from "@/app/components/SuggestionCard"
 import * as icons from 'react-icons/fa'
 
+
 export default function Dashboard() {
 
+    
     return (
-        <div className="grid grid-cols-4 grid-flow-row gap-4 h-full overflow-hidden">
-            <div className="flex flex-col border-r-2 border-black  h-screen overflow-y-auto hide-scrollbar scroll-smooth">
+        <div className="flex gap-4 h-full overflow-hidden p-4">
+            <div className="w-1/5 flex flex-col border-r-2 border-black  h-screen overflow-y-auto hide-scrollbar scroll-smooth">
                 <div className="">
                     <DashProfile />
                 </div>
@@ -78,7 +80,7 @@ export default function Dashboard() {
             </div>
 
             <div
-                className="col-span-2 flex flex-col gap-y-10 p-4 rounded-xl h-screen overflow-auto hide-scrollbar scroll-smooth bg-gradient-to-r from-purple-50 via-purple-50 via-purple-50 to-purple-300"
+                className="w-3/5 col-span-2 flex flex-col gap-y-10 p-4 rounded-xl h-screen overflow-auto hide-scrollbar scroll-smooth bg-gradient-to-r from-purple-50  via-purple-50 to-purple-300"
             >
                 <div className="w-full flex justify-between">
                     <div className="w-fit ">
@@ -106,7 +108,7 @@ export default function Dashboard() {
                 <Stories />
                 <Feeds />
             </div>
-            <div className="h-screen overflow-auto flex flex-col gap-y-10 scroll-smooth hide-scrollbar">
+            <div className="h-screen w-1/5 overflow-auto flex flex-col gap-y-10 scroll-smooth hide-scrollbar">
                 <ActivityCard />
                 <SuggestionCard />
             </div>

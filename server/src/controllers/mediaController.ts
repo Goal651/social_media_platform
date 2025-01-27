@@ -74,7 +74,23 @@ const fetchFiles = async (filePaths: string[]): Promise<string[] | undefined> =>
         return undefined;
     }
 };
+
+const deleteFile = (filePath: string): void => {
+    try {
+        fs.unlinkSync(filePath);
+    } catch (error) {
+        console.error('Error deleting file:', error);
+    }
+}
+
+const getFile = async (req: Request, res: Response) => {
+
+}
+
+
+
 export default {
     uploadMedia,
-    fetchFiles
+    fetchFiles,
+    getFile
 };

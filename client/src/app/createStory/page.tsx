@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Uploader from '@/app/components/Uploader';
 
 const AddStory = (): JSX.Element => {
@@ -11,25 +12,22 @@ const AddStory = (): JSX.Element => {
     const [postFileUrls, setPostFileUrls] = useState<string[]>([]);
     const [error, setError] = useState('');
 
-    // Handle file selection for multiple images
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setImages(Array.from(event.target.files));
+            console.log(event.target.files[0])
         }
     };
 
-    // Add each uploaded file's URL to the list
     const handleDataFromUploader = (data: string) => {
         setPostFileUrls((prevUrls) => [...prevUrls, data]);
     };
 
-    // Handle form submission
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
-        const validFilePaths = postFileUrls.filter((path) => path != null);
-        const uniqueFilePaths = [...new Set(validFilePaths)];
 
+        const uniqueFilePaths = Array.from(new Set(postFileUrls));
 
         const dataToSend = {
             content,
@@ -48,13 +46,16 @@ const AddStory = (): JSX.Element => {
             });
 
             if (response.ok) {
-                console.log(response);
+                alert('Story added successfully!');
+                setContent('');
+                setImages([]);
+                setPostFileUrls([]);
             } else {
-                setError('An error occurred while submitting your story');
+                setError('Failed to submit your story. Please try again.');
             }
         } catch (error) {
             console.error('Error submitting story:', error);
-            alert('An error occurred while submitting your story');
+            setError('An unexpected error occurred. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -63,20 +64,20 @@ const AddStory = (): JSX.Element => {
     return (
         <div className="h-full w-full flex flex-col items-center">
             <h1 className="text-3xl font-semibold mb-4">Add Story</h1>
-            <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4 p-4">
+            <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4 p-4 bg-white shadow-lg rounded-md">
                 <div>
-                    <label htmlFor="content" className="block text-lg font-medium">Content</label>
+                    <label htmlFor="content" className="block text-lg font-medium mb-1">Content</label>
                     <textarea
                         id="content"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         required
-                        className="w-full px-4 py-2 border rounded-md"
+                        className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
                         rows={5}
                     />
                 </div>
                 <div>
-                    <label htmlFor="images" className="block text-lg font-medium">Images</label>
+                    <label htmlFor="images" className="block text-lg font-medium mb-1">Images</label>
                     <input
                         type="file"
                         id="images"
@@ -85,18 +86,16 @@ const AddStory = (): JSX.Element => {
                         onChange={handleFileChange}
                         className="w-full px-4 py-2 border rounded-md"
                     />
-                    
-                        <Uploader
-                            uploadType="status"
-                            files={images}
-                            onFileUpload={handleDataFromUploader}
-                            totalFiles={images.length}
-                        />
-                    
+                    <Uploader
+                        uploadType="status"
+                        files={images}
+                        onFileUpload={handleDataFromUploader}
+                        totalFiles={images.length}
+                    />
                 </div>
                 <div className="grid grid-cols-3 gap-2 mt-4">
                     {images.map((image, index) => (
-                        <div key={index} className="w-full h-24 border rounded-md overflow-hidden">
+                        <div key={index} className="w-full h-24 border rounded-md overflow-hidden shadow-sm">
                             <img
                                 src={URL.createObjectURL(image)}
                                 alt={`Preview ${index + 1}`}
@@ -105,11 +104,19 @@ const AddStory = (): JSX.Element => {
                         </div>
                     ))}
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end space-x-2">
+                    <Link href="/dashboard">
+                        <button
+                            type="button"
+                            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600"
+                        >
+                            Cancel
+                        </button>
+                    </Link>
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-blue-500 text-white px-6 py-2 rounded-md disabled:bg-gray-400"
+                        className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
                     >
                         {isSubmitting ? 'Submitting...' : 'Add Story'}
                     </button>

@@ -1,81 +1,165 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { useRouter } from "next/navigation";
+
+
 
 // Initialize socket connection
 const socket: Socket = io("http://localhost:1000", {
   extraHeaders: {
-    "x-access-token": "eyJlbWFpbCI6ICJ1c2VyQGV4YW1wbGUuY29tIn0=", // Mock token
+    "x-access-token": "mock-token",
   },
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionAttempts: 5
 });
 
 export default function Home() {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [inputMessage, setInputMessage] = useState<string>("");
+  const token = localStorage.getItem("token") || ''
+  const [accessToken, setAccessToken] = useState(JSON.parse(token))
+  const [loading, setLoading] = useState(true)
+  const [currentUserLoadedSuccessfully, setCurrentUserLoadedSuccessfully] = useState(false)
+  const [usersLoadedSuccessfully, setUsersLoadedSuccessfully] = useState(false)
+  const [groupsLoadedSuccessfully, setGroupsLoadedSuccessfully] = useState(false)
+  const [validUser, setValidUser] = useState(false)
+  const [socketConnected, setSocketConnected] = useState(false)
+
+
+  const router = useRouter()
+
+  const checkUser = async () => {
+    if (accessToken) {
+      const response = await fetch("http://localhost:1000/api/checkUser", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: `${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      if (response.status === 400) setAccessToken(data.token)
+      else if (response.status === 200) setValidUser(true)
+
+    }
+    else {
+      router.push("/login")
+    }
+  }
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:1000/api/fetchAllUsers", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: `${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        sessionStorage.setItem("users", JSON.stringify(data.users))
+        setUsersLoadedSuccessfully(true)
+      }
+      else if (response.status === 400) setAccessToken(data.token)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch("http://localhost:1000/api/fetchCurrentUser", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: `${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        sessionStorage.setItem("user", JSON.stringify(data.userDetails))
+        setCurrentUserLoadedSuccessfully(true)
+      }
+      else if (response.status === 400) setAccessToken(data.token)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchAllGroups = async () => {
+    try {
+      const response = await fetch("http://localhost:1000/api/fetchAllGroups", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accessToken: `${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        sessionStorage.setItem("groups", JSON.stringify(data.groups))
+        setGroupsLoadedSuccessfully(true)
+      }
+      else if (response.status === 400) setAccessToken(data.token)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to server:", socket.id);
-    });
-
-    socket.on("message", (data: string) => {
-      setMessages((prev) => [...prev, data]); // Display messages
-    });
-    socket.on('notification', (data: string) => {
-      setMessages((prev) => [...prev, data]); // Display messages
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
-    // Cleanup on unmount
+    checkUser()
+    fetchCurrentUser()
+    fetchUsers()
+    fetchAllGroups()
+    socket.on('connect_error', () => setSocketConnected(false))
+    socket.on('connect', () => setSocketConnected(true))
     return () => {
-      socket.off("connect");
-      socket.off("message");
-      socket.off("disconnect");
-    };
+      socket.off('connect_error')
+      socket.off('connect')
+    }
   }, []);
 
-  // Handle sending messages
-  const handleSendMessage = () => {
-    if (inputMessage.trim() !== "") {
-      socket.emit("message", inputMessage); // Send message to the server
-      setMessages((prev) => [...prev, `You: ${inputMessage}`]); // Add to local messages
-      setInputMessage(""); // Clear input field
+
+  useEffect(() => {
+    if (
+      currentUserLoadedSuccessfully &&
+      usersLoadedSuccessfully &&
+      groupsLoadedSuccessfully &&
+      socketConnected &&
+      validUser
+    ) {
+      setLoading(false);
+      router.push("/dashboard");
     }
-  };
+  }, [
+    currentUserLoadedSuccessfully,
+    usersLoadedSuccessfully,
+    groupsLoadedSuccessfully,
+    socketConnected,
+    validUser,
+  ]);
+
+  useEffect(() => {
+    if (socketConnected && loading) {
+      checkUser()
+      fetchCurrentUser()
+      fetchUsers()
+      fetchAllGroups()
+    }
+  }, [socketConnected])
+
+
+
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
-      <h1 className="text-2xl font-bold mb-4">Wigo Chat Interface</h1>
-
-      {/* Chat Box */}
-      <div className="w-full max-w-md h-96 bg-white text-slate-700 border border-gray-300 rounded-lg shadow-lg overflow-y-auto p-4">
-        {messages.map((msg, index) => (
-          <div key={index} className="mb-2">
-            {msg}
-          </div>
-        ))}
-      </div>
-
-      {/* Message Input */}
-      <div className="flex items-center w-full max-w-md mt-4">
-        <input
-          type="text"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          className="flex-1 text-black border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Type a message..."
-        />
-        <button
-          onClick={handleSendMessage}
-          className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600"
-        >
-          Send
-        </button>
-      </div>
+    <div className="flex h-screen justify-center bg-gradient-to-r from-purple-300 to-purple-400 ">
+      {loading && <div className="flex flex-col  justify-center items-center">
+        <div className="font-bold text-3xl">Chat App</div>
+        <span className="loading loading-bars text-3xl text-black ">Loading</span>
+      </div>}
     </div>
   );
 }
