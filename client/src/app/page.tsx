@@ -19,7 +19,7 @@ const socket: Socket = io("http://localhost:1000", {
 
 export default function Home() {
   const token = localStorage.getItem("token") || ''
-  const [accessToken, setAccessToken] = useState(JSON.parse(token))
+  const [accessToken, setAccessToken] = useState(token)
   const [loading, setLoading] = useState(true)
   const [currentUserLoadedSuccessfully, setCurrentUserLoadedSuccessfully] = useState(false)
   const [usersLoadedSuccessfully, setUsersLoadedSuccessfully] = useState(false)
