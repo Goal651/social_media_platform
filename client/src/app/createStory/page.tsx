@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Uploader from '@/app/components/Uploader';
 
@@ -11,6 +11,12 @@ const AddStory = (): JSX.Element => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [postFileUrls, setPostFileUrls] = useState<string[]>([]);
     const [error, setError] = useState('');
+    const [accessToken, setAccessToken] = useState('');
+
+    useEffect(() => {
+        const token = localStorage.getItem('token') || ""
+        if (token) setAccessToken(token)
+    }, [])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -41,7 +47,7 @@ const AddStory = (): JSX.Element => {
                 body: JSON.stringify(dataToSend),
                 headers: {
                     'Content-Type': 'application/json',
-                    accessToken: `${localStorage.getItem('token')}`,
+                    accessToken: accessToken,
                 },
             });
 
