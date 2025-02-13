@@ -1,87 +1,87 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 interface Story {
-    _id: string;
+    _id: string
     creator: {
-        names: string;
-        _id: string;
-    };
-    content: string;
-    files: string[];
+        names: string
+        _id: string
+    }
+    content: string
+    files: string[]
 }
 
 interface UserStories {
-    userId: string;
-    userName: string;
-    userProfilePic: string;
-    stories: Story[];
+    userId: string
+    userName: string
+    userProfilePic: string
+    stories: Story[]
 }
 
 interface StoryViewerProps {
-    allUserStories: UserStories[];
-    onClose: () => void;
+    allUserStories: UserStories[]
+    onClose: () => void
 }
 
 const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => {
-    const [currentUserIndex, setCurrentUserIndex] = useState(0);
-    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+    const [currentUserIndex, setCurrentUserIndex] = useState(0)
+    const [currentStoryIndex, setCurrentStoryIndex] = useState(0)
 
-    const currentUser = allUserStories[currentUserIndex];
-    const currentStory = currentUser.stories[currentStoryIndex];
+    const currentUser = allUserStories[currentUserIndex]
+    const currentStory = currentUser.stories[currentStoryIndex]
 
     const handleNextStory = () => {
         if (currentStoryIndex < currentUser.stories.length - 1) {
-            setCurrentStoryIndex(currentStoryIndex + 1);
+            setCurrentStoryIndex(currentStoryIndex + 1)
         } else {
-            handleNextUser();
+            handleNextUser()
         }
-    };
+    }
 
     const handlePrevStory = () => {
         if (currentStoryIndex > 0) {
-            setCurrentStoryIndex(currentStoryIndex - 1);
+            setCurrentStoryIndex(currentStoryIndex - 1)
         } else if (currentUserIndex > 0) {
-            handlePrevUser();
+            handlePrevUser()
         }
-    };
+    }
 
     const handleNextUser = () => {
         if (currentUserIndex < allUserStories.length - 1) {
-            setCurrentUserIndex(currentUserIndex + 1);
-            setCurrentStoryIndex(0);
+            setCurrentUserIndex(currentUserIndex + 1)
+            setCurrentStoryIndex(0)
         } else {
-            onClose(); // Close viewer if no more users
+            onClose() // Close viewer if no more users
         }
-    };
+    }
 
     const handlePrevUser = () => {
         if (currentUserIndex > 0) {
-            setCurrentUserIndex(currentUserIndex - 1);
-            setCurrentStoryIndex(allUserStories[currentUserIndex - 1].stories.length - 1);
+            setCurrentUserIndex(currentUserIndex - 1)
+            setCurrentStoryIndex(allUserStories[currentUserIndex - 1].stories.length - 1)
         }
-    };
+    }
 
     const handleKeyDown = (event: KeyboardEvent) => {
         switch (event.key) {
             case 'ArrowRight':
-                handleNextStory();
-                break;
+                handleNextStory()
+                break
             case 'ArrowLeft':
-                handlePrevStory();
-                break;
+                handlePrevStory()
+                break
             case 'Escape':
-                onClose();
-                break;
+                onClose()
+                break
         }
-    };
+    }
 
     // Attach keyboard event listeners
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keydown', handleKeyDown)
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [currentStoryIndex, currentUserIndex]);
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [currentStoryIndex, currentUserIndex])
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col z-50">
@@ -160,13 +160,13 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
             <div className="flex gap-2 p-4 overflow-x-auto bg-black bg-opacity-70">
                 {allUserStories.map((user, index) => (
                     <div
-                        key={user.userId}
+                        key={index}
                         className={`flex flex-col items-center ${
                             index === currentUserIndex ? 'opacity-100' : 'opacity-50'
                         }`}
                         onClick={() => {
-                            setCurrentUserIndex(index);
-                            setCurrentStoryIndex(0);
+                            setCurrentUserIndex(index)
+                            setCurrentStoryIndex(0)
                         }}
                     >
                         <img
@@ -179,7 +179,7 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
                 ))}
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default MultiUserStoryViewer;
+export default MultiUserStoryViewer

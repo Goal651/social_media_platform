@@ -56,8 +56,8 @@ export default function Feeds() {
                 </div>
             </div>
             <div className="flex flex-col py-10  gap-y-8">
-                {posts.map(post => (
-                    <Posts key={''} post={post} />
+                {posts.map((post,index) => (
+                    <Posts key={index} post={post} />
                 ))}
             </div>
         </div>

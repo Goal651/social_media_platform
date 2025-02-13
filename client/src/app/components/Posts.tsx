@@ -1,9 +1,9 @@
 'use client'
 
-import Image from "next/image";
-import Gallery from "@/app/components/Gallery"; // Import the Gallery component
-import { FaRegComment, FaRegHeart } from 'react-icons/fa';
-import { useState } from "react";
+import Image from "next/image"
+import Gallery from "@/app/components/Gallery" // Import the Gallery component
+import { FaRegComment, FaRegHeart } from 'react-icons/fa'
+import { useState } from "react"
 
 interface Post {
     userDetails: {
@@ -72,5 +72,5 @@ export default function Posts({post}:{post:Post}) {
                 </>
             
         
-    );
+    )
 }

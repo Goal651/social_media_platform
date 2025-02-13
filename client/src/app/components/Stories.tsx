@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import MultiUserStoryViewer from './MultiUserStoryViewer';
-import Link from 'next/link';
-import Image from 'next/image';
+import React, { useState } from 'react'
+import MultiUserStoryViewer from './MultiUserStoryViewer'
+import Link from 'next/link'
+import Image from 'next/image'
 
 interface Story {
-    _id: string;
+    _id: string
     creator: {
-        names: string;
-        _id: string;
-    };
-    content: string;
-    files: string[];
+        names: string
+        _id: string
+    }
+    content: string
+    files: string[]
 }
 
 interface UserStories {
-    userId: string;
-    userName: string;
-    userProfilePic: string;
-    stories: Story[];
+    userId: string
+    userName: string
+    userProfilePic: string
+    stories: Story[]
 }
 
 const Stories = () => {
-    const [isStoryViewerOpen, setIsStoryViewerOpen] = useState(false);
-    const [selectedUserIndex, setSelectedUserIndex] = useState(0);
+    const [isStoryViewerOpen, setIsStoryViewerOpen] = useState(false)
+    const [selectedUserIndex, setSelectedUserIndex] = useState(0)
 
     // Example data for user stories
     const allUserStories: UserStories[] = [
@@ -77,18 +77,18 @@ const Stories = () => {
                 },
             ],
         },
-    ];
+    ]
 
     const openStoryViewer = (userIndex: number) => {
-        setSelectedUserIndex(userIndex);
-        setIsStoryViewerOpen(true);
+        setSelectedUserIndex(userIndex)
+        setIsStoryViewerOpen(true)
 
-    };
+    }
 
     const closeStoryViewer = () => {
-        setIsStoryViewerOpen(false);
+        setIsStoryViewerOpen(false)
         console.log(selectedUserIndex)
-    };
+    }
 
     return (
         <div className="p-4">
@@ -116,7 +116,7 @@ const Stories = () => {
                 </Link>
                 {allUserStories.map((user, index) => (
                     <div
-                        key={user.userId}
+                        key={index}
                         className="flex flex-col items-center cursor-pointer "
                         onClick={() => openStoryViewer(index)}
                     >
@@ -145,7 +145,7 @@ const Stories = () => {
                 />
             )}
         </div>
-    );
-};
+    )
+}
 
-export default Stories;
+export default Stories

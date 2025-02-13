@@ -1,45 +1,46 @@
 /* eslint-disable @next/next/no-img-element */
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Uploader from '@/app/components/Uploader';
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import Uploader from '@/app/components/Uploader'
 
 const AddStory = (): JSX.Element => {
-    const [content, setContent] = useState<string>('');
-    const [images, setImages] = useState<File[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [postFileUrls, setPostFileUrls] = useState<string[]>([]);
-    const [error, setError] = useState('');
-    const [accessToken, setAccessToken] = useState('');
+    const [content, setContent] = useState<string>('')
+    const [images, setImages] = useState<File[]>([])
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+    const [postFileUrls, setPostFileUrls] = useState<string[]>([])
+    const [error, setError] = useState('')
+    const [accessToken, setAccessToken] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token') || ""
+        console.log(token)
         if (token) setAccessToken(token)
     }, [])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
-            setImages(Array.from(event.target.files));
+            setImages(Array.from(event.target.files))
             console.log(event.target.files[0])
         }
-    };
+    }
 
     const handleDataFromUploader = (data: string) => {
-        setPostFileUrls((prevUrls) => [...prevUrls, data]);
-    };
+        setPostFileUrls((prevUrls) => [...prevUrls, data])
+    }
 
     const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        setIsSubmitting(true);
+        event.preventDefault()
+        setIsSubmitting(true)
 
-        const uniqueFilePaths = Array.from(new Set(postFileUrls));
+        const uniqueFilePaths = Array.from(new Set(postFileUrls))
 
         const dataToSend = {
             content,
             statusFileUrls: uniqueFilePaths,
             statusType: 'status',
-        };
+        }
 
         try {
             const response = await fetch('http://localhost:1000/api/createStatus', {
@@ -49,23 +50,23 @@ const AddStory = (): JSX.Element => {
                     'Content-Type': 'application/json',
                     accessToken: accessToken,
                 },
-            });
+            })
 
             if (response.ok) {
-                alert('Story added successfully!');
-                setContent('');
-                setImages([]);
-                setPostFileUrls([]);
+                alert('Story added successfully!')
+                setContent('')
+                setImages([])
+                setPostFileUrls([])
             } else {
-                setError('Failed to submit your story. Please try again.');
+                setError('Failed to submit your story. Please try again.')
             }
         } catch (error) {
-            console.error('Error submitting story:', error);
-            setError('An unexpected error occurred. Please try again.');
+            console.error('Error submitting story:', error)
+            setError('An unexpected error occurred. Please try again.')
         } finally {
-            setIsSubmitting(false);
+            setIsSubmitting(false)
         }
-    };
+    }
 
     return (
         <div className="h-full w-full flex flex-col items-center">
@@ -130,7 +131,7 @@ const AddStory = (): JSX.Element => {
                 {error && <p className="text-red-500 mt-4">{error}</p>}
             </form>
         </div>
-    );
-};
+    )
+}
 
-export default AddStory;
+export default AddStory

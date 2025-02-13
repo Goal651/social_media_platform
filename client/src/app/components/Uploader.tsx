@@ -13,7 +13,12 @@ export default function Testing(params: ParamsInterface) {
     const CHUNK_SIZE = 1024 * 50;
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState<number[]>([]);
-    const accessToken = localStorage.getItem('token')
+    const [accessToken, setAccessToken] = useState('')
+
+    useEffect(() => {
+        const token = localStorage.getItem("token") || ''
+        if (token) setAccessToken(token)
+    },[])
 
     const convertToBase64 = (fileChunk: Blob): Promise<string> => {
         return new Promise((resolve, reject) => {
