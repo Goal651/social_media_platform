@@ -110,6 +110,8 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const token = localStorage.getItem("token") || "";
+    setAccessToken(token)
     checkUser()
     fetchCurrentUser()
     fetchUsers()

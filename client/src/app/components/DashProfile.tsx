@@ -15,13 +15,23 @@ interface User {
 
 export default function DashProfile() {
     const loading = false
-    const sessionData = sessionStorage.getItem('user')
-    const sessionUser: User = JSON.parse(sessionData || '{}')
+
+    const [sessionUser, setSessionUser] = useState({})
+
     const [user, setUser] = useState<User | null>(sessionUser as User)
     const [loadingPic, setLoadingPic] = useState(true)
-    const accessToken = localStorage.getItem("token")
+    const [accessToken, setAccessToken] = useState('')
 
-    
+
+    useEffect(() => {
+        const sessionData = sessionStorage.getItem('user')
+        const newSessionData: User = JSON.parse(sessionData || '{}')
+        setSessionUser(newSessionData)
+        const accessToken = localStorage.getItem("token")
+        if (accessToken) setAccessToken(accessToken)
+    }, [])
+
+
     useEffect(() => {
         const fetchCurrentUser = async () => {
             if (user?.image === '') return setLoadingPic(false)
@@ -46,7 +56,7 @@ export default function DashProfile() {
                 console.error(error)
             }
         }
-    
+
         fetchCurrentUser()
     }, [accessToken])
 
