@@ -17,11 +17,17 @@ interface Post {
 export default function Feeds() {
     const photos = [
         '/user.png',
-        '/nopro.png',
-        
+        '/user.png',
+        '/user.png', 
+        '/user.png', 
+        '/user.png',
+        '/user.png',
         // '/user.png',
-        '/nopro.png',
-        '/contact.png'
+        // '/user.png',
+        // '/user.png', 
+        // '/user.png', 
+        // '/user.png',
+        // '/user.png',
     ]
     const userDetails = {
         username: 'Wilson Goal'

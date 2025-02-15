@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Uploader from '@/app/components/Uploader'
+import Image from 'next/image'
 
 const AddStory = (): JSX.Element => {
     const [content, setContent] = useState('')
@@ -101,7 +101,9 @@ const AddStory = (): JSX.Element => {
                 <div className="grid grid-cols-3 gap-2 mt-4">
                     {images.map((image, index) => (
                         <div key={index} className="w-full h-24 border rounded-md overflow-hidden shadow-sm">
-                            <img
+                            <Image
+                                width={1000}
+                                height={1000}
                                 src={URL.createObjectURL(image)}
                                 alt={`Preview ${index + 1}`}
                                 className="w-full h-full object-cover"

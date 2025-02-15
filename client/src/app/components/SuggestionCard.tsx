@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import React from "react";
 
 interface SuggestionItem {
@@ -55,7 +56,9 @@ const SuggestionsCard: React.FC = () => {
           <div key={index} className="flex items-center justify-between">
             {/* Profile Section */}
             <div className="flex items-center space-x-3">
-              <img
+              <Image
+                width={500}
+                height={500}
                 src={suggestion.profileImage}
                 alt={suggestion.username}
                 className="w-10 h-10 rounded-full object-cover"

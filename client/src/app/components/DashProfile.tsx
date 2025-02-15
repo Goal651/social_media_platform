@@ -1,92 +1,35 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { useEffect, useState } from "react"
-
-interface User {
-    username: string
-    image: string
-    names: string
-    email: string
-    id: string
-    file?: string
-}
-
+import Image from "next/image"
 
 export default function DashProfile() {
-    const loading = false
 
-    const [sessionUser, setSessionUser] = useState({})
-
-    const [user, setUser] = useState<User | null>(sessionUser as User)
-    const [loadingPic, setLoadingPic] = useState(true)
-    const [accessToken, setAccessToken] = useState('')
-
-
-    useEffect(() => {
-        const sessionData = sessionStorage.getItem('user')
-        const newSessionData: User = JSON.parse(sessionData || '{}')
-        setSessionUser(newSessionData)
-        const accessToken = localStorage.getItem("token")
-        if (accessToken) setAccessToken(accessToken)
-    }, [])
-
-
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            if (user?.image === '') return setLoadingPic(false)
-            try {
-                const response = await fetch(`http://localhost:1000/api/getFile/${user?.image}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        accessToken: `${accessToken}`,
-                    },
-                });
-                const data = await response.json();
-                if (response.status === 200) {
-                    setUser(prev => {
-                        if (prev) return { ...prev, file: data.file }
-                        return prev
-                    });
-                    setLoadingPic(false)
-                }
-                else if (response.status === 400) localStorage.setItem("token", data.token)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-
-        fetchCurrentUser()
-    }, [accessToken])
 
     return (
         <div className=' m-4 px-2 h-fit bg-purple-100 rounded-2xl text-black'>
-            {loading ? (
-                <div>
-                    <div className='loading loading-ring' />
-                </div>
-            ) : (user ? (<div className='flex flex-col space-y-4 items-center'>
+            <div className='flex flex-col space-y-4 items-center'>
                 <div className=' w-full flex flex-col items-center h-fit'>
                     <div className='rounded-4xl bg-black w-full place-items-center'>
-                        <img
+                        <Image
+                            height={100}
+                            width={1000}
                             src={'/user.png'}
                             alt='profile'
-                            style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                            className='rounded-2xl'
+                            className='rounded-2xl w-full h-32 object-cover'
                         />
                     </div>
                     <div className='relative z-10 w-fit bottom-10  bg-blue-500 rounded-full'>
-                        <img
+                        <Image
+                            height={500}
+                            width={500}
                             src={'/nopro.png'}
                             alt='profile'
-                            style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                            className='rounded-full'
+                            className='rounded-full w-20 h-20 object-cover'
                         />
                     </div>
                 </div>
                 <div className='relative bottom-10 '>
-                    <div className='font-semibold text-center '>{user?.names}</div>
+                    <div className='font-semibold text-center '>Wilson</div>
                     <div className='font-semibold text-center '>Texas, United States</div>
                 </div>
                 <div className='relative bottom-10  flex w-full justify-evenly *:font-semibold'>
@@ -105,17 +48,17 @@ export default function DashProfile() {
                 </div>
                 <div className='w-full relative bottom-10 '>
                     <div className='rounded-2xl bg-black w-full place-items-center'>
-                        <img
+                        <Image
+                            height={500}
+                            width={500}
                             src={'/user.png'}
                             alt='profile'
-                            style={{ width: '100%', height: '100px', objectFit: 'cover' }}
-                            className='rounded-2xl'
+                            className='rounded-2xl w-full h-20 object-cover'
                         />
                     </div>
                 </div>
             </div>
-            ) : (<div className='flex flex-col space-y-4 items-center'>
-            </div>))}
+
         </div>
     )
 }

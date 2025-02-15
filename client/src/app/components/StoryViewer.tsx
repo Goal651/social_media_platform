@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Story {
     _id: string;
@@ -18,13 +19,13 @@ const StoryViewer = ({ stories, onClose }: StoryViewerProps) => {
 
     const currentStory = stories[currentIndex];
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (currentIndex < stories.length - 1) {
             setCurrentIndex(currentIndex + 1);
         } else {
             onClose(); // Close viewer if it's the last story
         }
-    };
+    }, [currentIndex, onClose, stories.length]);
 
     const handlePrev = () => {
         if (currentIndex > 0) {
@@ -35,17 +36,19 @@ const StoryViewer = ({ stories, onClose }: StoryViewerProps) => {
     useEffect(() => {
         const timer = setTimeout(handleNext, 5000); // Auto-progress after 5 seconds
         return () => clearTimeout(timer); // Clear timer on unmount
-    }, [currentIndex]);
+    }, [currentIndex, handleNext]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col">
             {/* Top Bar */}
             <div className="flex items-center justify-between p-4 text-white">
                 <div className="flex items-center gap-2">
-                    <img
+                    <Image
+                        height={1000}
+                        width={500}
                         src={currentStory.creator.profilePic}
                         alt={currentStory.creator.names}
-                        className="w-10 h-10 rounded-full"
+                        className="w-10 h-10 object-cover rounded-full"
                     />
                     <div>
                         <h3 className="font-bold">{currentStory.creator.names}</h3>
@@ -67,7 +70,9 @@ const StoryViewer = ({ stories, onClose }: StoryViewerProps) => {
                         autoPlay
                     />
                 ) : (
-                    <img
+                    <Image
+                        height={1000}
+                        width={300}
                         src={currentStory.files[0]}
                         alt={currentStory.content}
                         className="max-h-full max-w-full object-contain"

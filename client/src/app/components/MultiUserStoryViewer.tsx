@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
 interface Story {
@@ -88,7 +89,9 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
             {/* User Info */}
             <div className="flex items-center justify-between p-4 text-white">
                 <div className="flex items-center gap-2">
-                    <img
+                    <Image
+                        height={500}
+                        width={500}
                         src={currentUser.userProfilePic}
                         alt={currentUser.userName}
                         className="w-10 h-10 rounded-full"
@@ -97,6 +100,32 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
                         <h3 className="font-bold">{currentUser.userName}</h3>
                     </div>
                 </div>
+
+                {/* Carousel for Other Users */}
+                <div className="flex gap-2 p-4 overflow-x-auto bg-black bg-opacity-70">
+                    {allUserStories.map((user, index) => (
+                        <div
+                            key={index}
+                            className={`flex flex-col items-center ${index === currentUserIndex ? 'opacity-100' : 'opacity-50'
+                                }`}
+                            onClick={() => {
+                                setCurrentUserIndex(index)
+                                setCurrentStoryIndex(0)
+                            }}
+                        >
+                            <Image
+                                height={100}
+                                width={100}
+                                src={user.userProfilePic}
+                                alt={user.userName}
+                                className="w-12 h-12 rounded-full"
+                            />
+                            <p className="text-xs text-white mt-1">{user.userName}</p>
+                        </div>
+                    ))}
+                </div>
+
+
                 <button onClick={onClose} className="text-xl font-bold">
                     ✕
                 </button>
@@ -112,10 +141,12 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
                         autoPlay
                     />
                 ) : (
-                    <img
+                    <Image
+                        height={1000}
+                        width={1000}
                         src={currentStory.files[0]}
                         alt={currentStory.content}
-                        className="max-h-full max-w-full object-contain"
+                        className="h-96  object-contain"
                     />
                 )}
             </div>
@@ -133,20 +164,18 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
                     {currentUser.stories.map((_, index) => (
                         <div
                             key={index}
-                            className={`h-2 w-2 rounded-full ${
-                                index === currentStoryIndex ? 'bg-white' : 'bg-gray-500'
-                            }`}
+                            className={`h-2 w-2 rounded-full ${index === currentStoryIndex ? 'bg-white' : 'bg-gray-500'
+                                }`}
                         />
                     ))}
                 </div>
                 <button
                     onClick={handleNextStory}
-                    className={`text-xl ${
-                        currentUserIndex === allUserStories.length - 1 &&
+                    className={`text-xl ${currentUserIndex === allUserStories.length - 1 &&
                         currentStoryIndex === currentUser.stories.length - 1
-                            ? 'opacity-50'
-                            : ''
-                    }`}
+                        ? 'opacity-50'
+                        : ''
+                        }`}
                     disabled={
                         currentUserIndex === allUserStories.length - 1 &&
                         currentStoryIndex === currentUser.stories.length - 1
@@ -156,28 +185,7 @@ const MultiUserStoryViewer = ({ allUserStories, onClose }: StoryViewerProps) => 
                 </button>
             </div>
 
-            {/* Carousel for Other Users */}
-            <div className="flex gap-2 p-4 overflow-x-auto bg-black bg-opacity-70">
-                {allUserStories.map((user, index) => (
-                    <div
-                        key={index}
-                        className={`flex flex-col items-center ${
-                            index === currentUserIndex ? 'opacity-100' : 'opacity-50'
-                        }`}
-                        onClick={() => {
-                            setCurrentUserIndex(index)
-                            setCurrentStoryIndex(0)
-                        }}
-                    >
-                        <img
-                            src={user.userProfilePic}
-                            alt={user.userName}
-                            className="w-12 h-12 rounded-full"
-                        />
-                        <p className="text-xs text-white mt-1">{user.userName}</p>
-                    </div>
-                ))}
-            </div>
+
         </div>
     )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 
 interface GalleryProps {
@@ -9,8 +9,6 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null)
-    const columns = Math.floor((photos.length / 2))+5
-    const girdColumns = `grid-rows-${columns}`
 
     // Close the modal
     const closeModal = () => {
@@ -18,26 +16,26 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
     }
 
     // Navigate to the previous photo
-    const showPreviousPhoto = () => {
+    const showPreviousPhoto = useCallback(() => {
         if (selectedPhotoIndex !== null) {
             setSelectedPhotoIndex((prevIndex) =>
                 prevIndex === 0 ? photos.length - 1 : (prevIndex as number) - 1
             )
         }
-    }
+    },[photos.length, selectedPhotoIndex])
 
     // Navigate to the next photo
-    const showNextPhoto = () => {
+    const showNextPhoto = useCallback(() => {
         if (selectedPhotoIndex !== null) {
             setSelectedPhotoIndex((prevIndex) =>
                 prevIndex === photos.length - 1 ? 0 : (prevIndex as number) + 1
             )
         }
-    }
+    },[photos.length, selectedPhotoIndex])
 
     // Keyboard navigation
     useEffect(() => {
-        console.log(girdColumns)
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (selectedPhotoIndex !== null) {
                 if (event.key === "Escape") {
@@ -54,81 +52,265 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [selectedPhotoIndex])
+    }, [selectedPhotoIndex, showNextPhoto, showPreviousPhoto])
+
+    const photoRender = () => {
+        const size = photos.length
+        if (!photos) return
+        if (size <= 0) return
+        switch (size) {
+            case 1:
+                return (<div className="flex items-center justify-center">
+                    <div
+                        className="relative cursor-pointer w-80 h-96 "
+                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                    >
+                        <Image
+                            src={photos[0]}
+                            alt=""
+                            width={1000}
+                            height={100}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
+                    </div>
+                </div>
+                )
+
+            case 2:
+                return (
+                    <div className="flex justify-center gap-x-2">
+                        {photos.map((photo, index) => (
+                            <div
+                                key={index}
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                            >
+                                <Image
+                                    src={photo}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )
+
+            case 3:
+                return (
+                    <div className="flex justify-center gap-x-2">
+                        {photos.map((photo, index) => (
+                            <div
+                                key={index}
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                            >
+                                <Image
+                                    src={photo}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )
+
+            case 4:
+                return (
+                    <div className="flex justify-center gap-x-2 items-center">
+                        <div>
+                            <div
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                            >
+                                <Image
+                                    src={photos[0]}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-y-2">
+
+                            {photos.slice(1, 3).map((photo, index) => (
+                                <div
+                                    key={index}
+                                    className="relative cursor-pointer w-80 h-48"
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                >
+                                    <Image
+                                        src={photo}
+                                        alt=""
+                                        width={1000}
+                                        height={100}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <div>
+                            <div
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                            >
+                                <Image
+                                    src={photos[3]}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )
+
+            case 5:
+                return (
+                    <div className="flex gap-x-2 justify-center">
+                        <div>
+                            <div
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                            >
+                                <Image
+                                    src={photos[0]}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex gap-x-2 justify-center">
+                            <div className="flex flex-col gap-y-2">
+                                {photos.slice(1, 3).map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative cursor-pointer w-80 h-48"
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                    >
+                                        <Image
+                                            src={photo}
+                                            alt=""
+                                            width={1000}
+                                            height={100}
+                                            className="w-full h-full object-cover rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                {photos.slice(3, 5).map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative cursor-pointer w-80 h-48"
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                    >
+                                        <Image
+                                            src={photo}
+                                            alt=""
+                                            width={1000}
+                                            height={100}
+                                            className="w-full h-full object-cover rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                )
+
+            default:
+                return (
+                    <div className="flex gap-x-2 justify-center">
+                        <div>
+                            <div
+                                className="relative cursor-pointer w-80 h-96"
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                            >
+                                <Image
+                                    src={photos[0]}
+                                    alt=""
+                                    width={1000}
+                                    height={100}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex gap-x-2">
+                            <div className="flex flex-col gap-y-2">
+                                {photos.slice(1, 3).map((photo, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative cursor-pointer w-80 h-48"
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                    >
+                                        <Image
+                                            src={photo}
+                                            alt=""
+                                            width={1000}
+                                            height={100}
+                                            className="w-full h-full object-cover rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <div
+                                    className="relative cursor-pointer w-80 h-48"
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                >
+                                    <Image
+                                        src={photos[4]}
+                                        alt=""
+                                        width={1000}
+                                        height={100}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                </div>
+                                <div
+                                    className="relative cursor-pointer w-80 h-48"
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                >
+                                    <Image
+                                        src={photos[5]}
+                                        alt=""
+                                        width={1000}
+                                        height={100}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                    <div className="absolute rounded-lg w-full h-full top-0  z-20 flex items-center justify-center bg-black opacity-50 text-white text-lg">
+                                        +{size - 5}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                )
+
+
+        }
+    }
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4">
             {/* Photo Grid */}
-            <div className={`grid ${girdColumns}  gap-4`}>
-                {/* Highlighted Photo */}
-                {photos.length > 0 && (
-                    <div
-                        className="relative cursor-pointer w-full h-56"
-                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
-                    >
-                        <Image
-                            src={photos[0]}
-                            alt=""
-                            width={1000}
-                            height={100}
-                            className="w-full h-full object-cover rounded-lg"
-                        />
-                    </div>
-                )}
-
-                {/* Smaller Photos */}
-                <div className={`grid grid-rows-2 grid-cols-3 gap-2 col-span-2`}>
-                    {photos.slice(1).map((photo, index) => (
-                        <div
-                            key={index}
-                            className="relative cursor-pointer h-28"
-                            onClick={() => setSelectedPhotoIndex(index + 1)}
-                        >
-                            <Image
-                                width={1000}
-                                height={1000}
-                                src={photo}
-                                alt={`Gallery Image ${index + 1}`}
-                                className="w-full h-full object-cover rounded-lg"
-                            />
-                            {/* Overlay for extra photos */}
-                            {index === photos.slice(1).length - 1 && photos.length > photos.slice(1).length && (
-                                <>
-                                    <Image
-                                        width={1000}
-                                        height={1000}
-                                        src={photo}
-                                        alt={`Gallery Image ${index + 1}`}
-                                        className="w-full h-full object-cover rounded-lg"
-                                    />
-                                    <div className="absolute  z-20 flex items-center justify-center bg-black  text-white text-lg">
-                                        +{photos.length - 5}
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    ))}
-                </div>
-                {columns % 2 == 0 && (
-                    <div
-                        className="relative cursor-pointer w-full h-56"
-                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
-                    >
-                        <Image
-                            src={photos[0]}
-                            alt=""
-                            width={1000}
-                            height={100}
-                            className="w-full h-full object-cover rounded-lg"
-                        />
-                    </div>
-                )}
+            <div >
+                {photoRender()}
             </div>
 
             {/* Modal for Photo Preview */}
             {selectedPhotoIndex !== null && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50"
+                    className="fixed  inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50"
                     onClick={closeModal}
                 >
                     <div
@@ -142,7 +324,9 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                             ✕
                         </button>
                         <div className="w-full flex-1 flex items-center justify-center overflow-hidden">
-                            <img
+                            <Image
+                                height={1000}
+                                width={300}
                                 src={photos[selectedPhotoIndex]}
                                 alt="Preview"
                                 className="max-w-full max-h-full object-contain rounded-lg"
@@ -168,9 +352,11 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                         {/* Thumbnails */}
                         <div className="absolute bottom-2 flex gap-2 overflow-x-auto px-4 py-2">
                             {photos.map((photo, index) => (
-                                <img
+                                <Image
                                     key={index}
                                     src={photo}
+                                    height={500}
+                                    width={500}
                                     alt={`Thumbnail ${index + 1}`}
                                     className={`w-12 h-12 object-cover rounded-md cursor-pointer border ${index === selectedPhotoIndex ? "border-white" : "border-transparent"
                                         }`}

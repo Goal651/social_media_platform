@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import React from "react";
 
 interface ActivityItem {
@@ -55,7 +56,9 @@ const ActivityCard: React.FC = () => {
                 {activities.map((activity, index) => (
                     <div key={index} className="flex items-start space-x-4">
                         {/* Profile Image */}
-                        <img
+                        <Image
+                            height={500}
+                            width={500}
                             src={activity.profileImage}
                             alt={activity.username}
                             className="w-10 h-10 rounded-full object-cover"
@@ -72,7 +75,9 @@ const ActivityCard: React.FC = () => {
 
                         {/* Preview Image (Optional) */}
                         {activity.previewImage && (
-                            <img
+                            <Image
+                                height={500}
+                                width={500}
                                 src={'/userPro.png'}
                                 alt="Preview"
                                 className="w-12 h-12 rounded-md object-cover"
@@ -88,7 +93,9 @@ const ActivityCard: React.FC = () => {
                 <div className="space-y-4">
                     {activities.slice(0, 3).map((activity, index) => (
                         <div key={index} className="flex items-start space-x-4">
-                            <img
+                            <Image
+                                height={500}
+                                width={500}
                                 src={activity.profileImage}
                                 alt={activity.username}
                                 className="w-10 h-10 rounded-full object-cover"
