@@ -6,23 +6,21 @@ import Link from 'next/link'
 import Uploader from '@/app/components/Uploader'
 
 const AddStory = (): JSX.Element => {
-    const [content, setContent] = useState<string>('')
+    const [content, setContent] = useState('')
     const [images, setImages] = useState<File[]>([])
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [postFileUrls, setPostFileUrls] = useState<string[]>([])
     const [error, setError] = useState('')
     const [accessToken, setAccessToken] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token') || ""
-        console.log(token)
         if (token) setAccessToken(token)
     }, [])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setImages(Array.from(event.target.files))
-            console.log(event.target.files[0])
         }
     }
 

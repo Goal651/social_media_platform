@@ -1,101 +1,128 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react"
+import Image from "next/image"
 
 interface GalleryProps {
-    photos: string[];
+    photos: string[]
 }
 
 const Gallery: React.FC<GalleryProps> = ({ photos }) => {
-    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null)
+    const columns = Math.floor((photos.length / 2))+5
+    const girdColumns = `grid-rows-${columns}`
 
     // Close the modal
     const closeModal = () => {
-        setSelectedPhotoIndex(null);
-    };
+        setSelectedPhotoIndex(null)
+    }
 
     // Navigate to the previous photo
     const showPreviousPhoto = () => {
         if (selectedPhotoIndex !== null) {
             setSelectedPhotoIndex((prevIndex) =>
                 prevIndex === 0 ? photos.length - 1 : (prevIndex as number) - 1
-            );
+            )
         }
-    };
+    }
 
     // Navigate to the next photo
     const showNextPhoto = () => {
         if (selectedPhotoIndex !== null) {
             setSelectedPhotoIndex((prevIndex) =>
                 prevIndex === photos.length - 1 ? 0 : (prevIndex as number) + 1
-            );
+            )
         }
-    };
+    }
 
     // Keyboard navigation
     useEffect(() => {
+        console.log(girdColumns)
         const handleKeyDown = (event: KeyboardEvent) => {
             if (selectedPhotoIndex !== null) {
                 if (event.key === "Escape") {
-                    closeModal();
+                    closeModal()
                 } else if (event.key === "ArrowLeft") {
-                    showPreviousPhoto();
+                    showPreviousPhoto()
                 } else if (event.key === "ArrowRight") {
-                    showNextPhoto();
+                    showNextPhoto()
                 }
             }
-        };
+        }
 
-        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown)
         return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [selectedPhotoIndex]);
+            window.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [selectedPhotoIndex])
 
     return (
         <div className="w-full max-w-5xl mx-auto p-4">
             {/* Photo Grid */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className={`grid ${girdColumns}  gap-4`}>
                 {/* Highlighted Photo */}
                 {photos.length > 0 && (
                     <div
-                        className="relative cursor-pointer w-full h-full"
-                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)} // Optional click handler
+                        className="relative cursor-pointer w-full h-56"
+                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
                     >
                         <Image
-                            src="/contact.png"
+                            src={photos[0]}
                             alt=""
-                            width={100}
+                            width={1000}
                             height={100}
                             className="w-full h-full object-cover rounded-lg"
                         />
                     </div>
-
                 )}
 
                 {/* Smaller Photos */}
-                <div className="grid grid-rows-2 grid-cols-3 gap-2 col-span-2">
-                    {photos.slice(1, 7).map((photo, index) => (
+                <div className={`grid grid-rows-2 grid-cols-3 gap-2 col-span-2`}>
+                    {photos.slice(1).map((photo, index) => (
                         <div
                             key={index}
-                            className="relative cursor-pointer"
+                            className="relative cursor-pointer h-28"
                             onClick={() => setSelectedPhotoIndex(index + 1)}
                         >
-                            <img
+                            <Image
+                                width={1000}
+                                height={1000}
                                 src={photo}
                                 alt={`Gallery Image ${index + 1}`}
                                 className="w-full h-full object-cover rounded-lg"
                             />
                             {/* Overlay for extra photos */}
-                            {index === 5 && photos.length > 7 && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg">
-                                    +{photos.length - 7}
-                                </div>
+                            {index === photos.slice(1).length - 1 && photos.length > photos.slice(1).length && (
+                                <>
+                                    <Image
+                                        width={1000}
+                                        height={1000}
+                                        src={photo}
+                                        alt={`Gallery Image ${index + 1}`}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                    <div className="absolute  z-20 flex items-center justify-center bg-black  text-white text-lg">
+                                        +{photos.length - 5}
+                                    </div>
+                                </>
                             )}
                         </div>
                     ))}
                 </div>
+                {columns % 2 == 0 && (
+                    <div
+                        className="relative cursor-pointer w-full h-56"
+                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                    >
+                        <Image
+                            src={photos[0]}
+                            alt=""
+                            width={1000}
+                            height={100}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Modal for Photo Preview */}
@@ -155,7 +182,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                 </div>
             )}
         </div>
-    );
-};
+    )
+}
 
-export default Gallery;
+export default Gallery

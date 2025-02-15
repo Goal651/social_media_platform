@@ -23,10 +23,10 @@ export default function Posts({post}:{post:Post}) {
 
     return (
                 <>
-                    <div className="flex flex-col gap-y-2 bg-gradient-to-r from-purple-300 to-purple-400 rounded-xl text-black">
+                    <div className="flex flex-col p-2 gap-y-2 bg-slate-300  text-black">
                         {/* Header Section */}
                         <div className="flex justify-start items-center p-4">
-                            <div className="rounded-full relative w-16 h-16">
+                            <div className="rounded-full relative w-20 h-20">
                                 <Image
                                     src="/contact.png"
                                     alt=""

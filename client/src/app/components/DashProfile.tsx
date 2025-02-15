@@ -68,7 +68,7 @@ export default function DashProfile() {
                 </div>
             ) : (user ? (<div className='flex flex-col space-y-4 items-center'>
                 <div className=' w-full flex flex-col items-center h-fit'>
-                    <div className='rounded-2xl bg-black w-full place-items-center'>
+                    <div className='rounded-4xl bg-black w-full place-items-center'>
                         <img
                             src={'/user.png'}
                             alt='profile'
@@ -77,16 +77,12 @@ export default function DashProfile() {
                         />
                     </div>
                     <div className='relative z-10 w-fit bottom-10  bg-blue-500 rounded-full'>
-                        {loadingPic ? (
-                            <div className="skeleton w-full h-full object-cover "></div>
-                        ) : (
-                            <img
-                                src={user.file ? user.file : '/nopro.png'}
-                                alt='profile'
-                                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                                className='rounded-full'
-                            />
-                        )}
+                        <img
+                            src={'/nopro.png'}
+                            alt='profile'
+                            style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                            className='rounded-full'
+                        />
                     </div>
                 </div>
                 <div className='relative bottom-10 '>

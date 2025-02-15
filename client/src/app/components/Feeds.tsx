@@ -16,17 +16,17 @@ interface Post {
 
 export default function Feeds() {
     const photos = [
-        'user.png',
-        'nopro.png',
-        'contact.png',
-        'user.png',
-        'nopro.png',
-        'contact.png'
+        '/user.png',
+        '/nopro.png',
+        
+        // '/user.png',
+        '/nopro.png',
+        '/contact.png'
     ]
     const userDetails = {
         username: 'Wilson Goal'
         , location: 'Muhanga City',
-        image: 'userPro.png'
+        image: '/userPro.png'
     }
 
     const postDetails = {
@@ -56,7 +56,7 @@ export default function Feeds() {
                 </div>
             </div>
             <div className="flex flex-col py-10  gap-y-8">
-                {posts.map((post,index) => (
+                {posts.map((post, index) => (
                     <Posts key={index} post={post} />
                 ))}
             </div>
