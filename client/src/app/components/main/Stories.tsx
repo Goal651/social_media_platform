@@ -125,7 +125,8 @@ const Stories = () => {
                                 <Image
                                     alt='profile'
                                     src={user.userProfilePic}
-                                    layout='fill'
+                                    width={1000}
+                                    height={100}
                                     className='rounded-full w-full h-full '
                                 />
                             </div>

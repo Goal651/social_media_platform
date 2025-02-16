@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Uploader from '@/app/components/Uploader'
+import Uploader from '@/app/utils/Uploader'
 import Image from 'next/image'
 
 const AddStory = (): JSX.Element => {

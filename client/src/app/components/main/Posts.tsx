@@ -30,8 +30,9 @@ export default function Posts({post}:{post:Post}) {
                                 <Image
                                     src="/contact.png"
                                     alt=""
-                                    layout="fill"
-                                    className="object-cover rounded-full"
+                                    height={500}
+                                    width={500}
+                                    className="object-cover w-full h-full rounded-full"
                                 />
                             </div>
                             <div className="flex flex-col justify-start ml-4">

@@ -1,5 +1,5 @@
 'use client'
-import Posts from "@/app/components/Posts"
+import Posts from "@/app/components/main/Posts"
 
 interface Post {
     userDetails: {
