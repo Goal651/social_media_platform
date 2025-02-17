@@ -18,16 +18,7 @@ export default function Feeds() {
     const photos = [
         '/user.png',
         '/user.png',
-        '/user.png', 
-        '/user.png', 
-        '/user.png',
-        '/user.png',
-        // '/user.png',
-        // '/user.png',
-        // '/user.png', 
-        // '/user.png', 
-        // '/user.png',
-        // '/user.png',
+
     ]
     const userDetails = {
         username: 'Wilson Goal'

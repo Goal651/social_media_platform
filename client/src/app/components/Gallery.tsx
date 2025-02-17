@@ -104,7 +104,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                             <div
                                 key={index}
                                 className="relative cursor-pointer w-80 h-96"
-                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
                             >
                                 <Image
                                     src={photo}
@@ -141,7 +141,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                                 <div
                                     key={index}
                                     className="relative cursor-pointer w-80 h-48"
-                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index+1)}
                                 >
                                     <Image
                                         src={photo}
@@ -156,7 +156,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                         <div>
                             <div
                                 className="relative cursor-pointer w-80 h-96"
-                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(3)}
                             >
                                 <Image
                                     src={photos[3]}
@@ -193,7 +193,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                                     <div
                                         key={index}
                                         className="relative cursor-pointer w-80 h-48"
-                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index+1)}
                                     >
                                         <Image
                                             src={photo}
@@ -210,7 +210,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                                     <div
                                         key={index}
                                         className="relative cursor-pointer w-80 h-48"
-                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index+3)}
                                     >
                                         <Image
                                             src={photo}
@@ -250,7 +250,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                                     <div
                                         key={index}
                                         className="relative cursor-pointer w-80 h-48"
-                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index)}
+                                        onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(index+1)}
                                     >
                                         <Image
                                             src={photo}
@@ -265,7 +265,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                             <div className="flex flex-col gap-y-2">
                                 <div
                                     className="relative cursor-pointer w-80 h-48"
-                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(4)}
                                 >
                                     <Image
                                         src={photos[4]}
@@ -277,7 +277,7 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
                                 </div>
                                 <div
                                     className="relative cursor-pointer w-80 h-48"
-                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(0)}
+                                    onClick={() => setSelectedPhotoIndex && setSelectedPhotoIndex(5)}
                                 >
                                     <Image
                                         src={photos[5]}
@@ -310,38 +310,38 @@ const Gallery: React.FC<GalleryProps> = ({ photos }) => {
             {/* Modal for Photo Preview */}
             {selectedPhotoIndex !== null && (
                 <div
-                    className="fixed  inset-0 bg-black bg-opacity-75 backdrop-blur-sm flex items-center justify-center z-50"
+                    className="fixed  inset-0 bg-black flex items-center justify-center z-10"
                     onClick={closeModal}
                 >
                     <div
-                        className="relative bg-white p-4 rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col items-center"
+                        className="relative z-20 bg-purple-200 p-4 rounded-lg max-w-4xl w-full h-[90vh] flex flex-col items-center"
                         onClick={(e) => e.stopPropagation()} // Prevent modal close on inner click
                     >
                         <button
                             onClick={closeModal}
-                            className="absolute top-2 right-2 text-white bg-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
+                            className="absolute top-2 right-2 text-white bg-black btn btn-circle flex items-center justify-center focus:outline-none"
                         >
                             ✕
                         </button>
-                        <div className="w-full flex-1 flex items-center justify-center overflow-hidden">
+                        <div className="w-full flex pt-5 pb-14 px-20 items-center justify-center overflow-hidden">
                             <Image
                                 height={1000}
-                                width={300}
+                                width={1000}
                                 src={photos[selectedPhotoIndex]}
                                 alt="Preview"
-                                className="max-w-full max-h-full object-contain rounded-lg"
+                                className="w-full h-full object-cover rounded-xl"
                             />
                         </div>
                         {/* Navigation Buttons */}
                         <button
                             onClick={showPreviousPhoto}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white btn btn-circle rounded-full hover:opacity-70"
                         >
                             ←
                         </button>
                         <button
                             onClick={showNextPhoto}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white btn btn-circle rounded-full hover:opacity-70"
                         >
                             →
                         </button>
