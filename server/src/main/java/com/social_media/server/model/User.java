@@ -19,6 +19,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String names;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -33,6 +36,8 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String following; // Stored as JSON string
+
+    @Column(nullable = true)
 
     // Convert List<String> to JSON before saving
     public void setFollowersList(List<String> followersList) {
