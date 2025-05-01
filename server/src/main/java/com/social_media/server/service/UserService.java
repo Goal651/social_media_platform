@@ -1,31 +1,32 @@
 package com.social_media.server.service;
 
-import com.social_media.server.model.User;
-import com.social_media.server.repository.UserRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.social_media.server.dto.User;
+import com.social_media.server.mapper.UserMapper;
+import com.social_media.server.model.UserModel;
+import com.social_media.server.repository.UserRepository;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
 
-    // Save a new user
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
-
-    // Get all users
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    // Get a user by username
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User createUser(User user) {
+        UserModel newUser = UserMapper.toEntity(user);
+        return UserMapper.toDTO(newUser);
+
     }
+
 }
