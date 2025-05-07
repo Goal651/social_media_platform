@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -16,27 +17,20 @@ export default function Login() {
         try {
             const loginData = { email, password };
 
-            const response = await fetch('http://localhost:1000/api/login', {
-                method: 'POST',
+            const response = await axios.post('http://localhost:8080/api/auth/login', loginData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(loginData),
             });
-
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.setItem('token', data.token);
-                navigate.push('/dashboard');
-            } else if (response.status === 403) {
-                setError(data.message);
-            } else {
-                setError(data.message || 'Invalid credentials');
-            }
+            setError(response.data || 'Invalid credentials');
             setLoading(false);
         } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log(error.response)
+                setError(error.response?.data);
+
+            }
             console.error('Login error:', error);
-            setError('An error occurred during login');
             setLoading(false);
         }
     };
@@ -66,7 +60,7 @@ export default function Login() {
                             type="email"
                             id="email"
                             placeholder="john.doe@example.com"
-                            className="w-full p-2  rounded"
+                            className="w-full p-2  rounded border-1"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -81,7 +75,7 @@ export default function Login() {
                             type="password"
                             id="password"
                             placeholder="********"
-                            className="w-full p-2 rounded"
+                            className="w-full p-2 rounded border-1"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -100,7 +94,7 @@ export default function Login() {
                         </button>
                     )}
                     <div
-                    className='flex justify-center'>
+                        className='flex justify-center'>
                         <button
                             onClick={() => navigate.push('/register')}
                             className="w-full py-2 px-4 text-white bg-slate-600 hover:bg-slate-700 rounded-md"
