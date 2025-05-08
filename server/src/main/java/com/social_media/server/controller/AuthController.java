@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.social_media.server.schema.LoginRequest;
+import com.social_media.server.schema.LoginResponse;
 import com.social_media.server.service.AuthService;
 
 @RestController
@@ -20,9 +20,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> userLogin(@Validated @RequestBody  LoginRequest loginRequest) {
-        ResponseEntity<String> response = authService.userLogin(loginRequest);
-        return response;
+    public ResponseEntity<LoginResponse> userLogin(@Validated @RequestBody LoginRequest loginRequest) {
+        LoginResponse response = authService.userLogin(loginRequest);
+        return ResponseEntity.ok(response);
     };
 
 }

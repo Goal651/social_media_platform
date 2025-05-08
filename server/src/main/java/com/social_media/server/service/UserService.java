@@ -31,15 +31,10 @@ public class UserService {
     public User getUserByEmail(String email) {
 
         Optional<List<User>> query = userRepository.findByEmail(email);
-        if (!query.isPresent()|| query.get().isEmpty()) {
-            throw new RuntimeException("User not found");
+        if (!query.isPresent() || query.get().isEmpty()) {
+            return null;
         }
-        User user = query.get().get(0);
-        if (user != null)
-            return user;
-        else
-            throw new RuntimeException("User not found");
-
+        return query.get().get(0);
     }
 
 }
