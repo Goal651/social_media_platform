@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { LoginResponse } from '../../../interfaces/loginResponse';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -22,13 +23,16 @@ export default function Login() {
                     'Content-Type': 'application/json',
                 },
             });
-            setError(response.data || 'Invalid credentials');
+            const result: LoginResponse = response.data
+            if (!result.success) {
+                setError(result.message || 'Invalid credentials');
+
+            }
             setLoading(false);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log(error.response)
                 setError(error.response?.data);
-
             }
             console.error('Login error:', error);
             setLoading(false);
